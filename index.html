@@ -5,25 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ana Paula Mendes | Portfólio UGC</title>
 <meta name="description" content="Portfólio UGC de Ana Paula Mendes: vídeos curtos com roteiro aprovado e entrega em até 72 horas úteis para beleza, comida, casa e decoração, fitness e tech.">
-<meta name="theme-color" content="#0f7b5f">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%230f7b5f'/%3E%3Cpath d='M12 9.5v13l11-6.5z' fill='%23ffd166'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#4b5a32">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%234b5a32'/%3E%3Cpath d='M12 9.5v13l11-6.5z' fill='%23f4c9b5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
   :root {
+    /* Paleta: verde musgo escuro + terracota */
     --branco: #ffffff;
-    --gelo: #f6f7f5;
-    --verde: #0f7b5f;
-    --verde-escuro: #0a4d3c;
-    --verde-claro: #e3f2ed;
-    --amarelo: #ffd166;
-    --tinta: #16211d;
-    --suave: #51605a;
-    --linha: #e4e7e2;
-    --sombra: 0 10px 30px rgba(22, 33, 29, .08);
-    --sombra-forte: 0 18px 44px rgba(22, 33, 29, .14);
+    --gelo: #f6f3ee;
+    --verde: #4b5a32;
+    --verde-escuro: #2f3a1f;
+    --verde-claro: #e7eadb;
+    --terracota: #b5563a;
+    --terracota-escuro: #8f3f28;
+    --terracota-claro: #f4c9b5;
+    --tinta: #1f231a;
+    --suave: #5a5b4c;
+    --linha: #e8e2d8;
+    --sombra: 0 10px 30px rgba(31, 35, 26, .08);
+    --sombra-forte: 0 18px 44px rgba(31, 35, 26, .15);
     --raio: 24px;
     --raio-grande: 36px;
     --largura: 1200px;
@@ -49,7 +52,7 @@
   [hidden] { display: none !important; }
 
   :focus-visible { outline: 3px solid var(--verde); outline-offset: 3px; border-radius: 8px; }
-  .fundo-verde :focus-visible, .rodape :focus-visible { outline-color: var(--amarelo); }
+  .fundo-verde :focus-visible, .rodape :focus-visible { outline-color: var(--terracota-claro); }
 
   .so-leitor {
     position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
@@ -71,7 +74,7 @@
     font-family: "Instrument Serif", Georgia, serif;
     font-style: italic; font-weight: 400;
     font-size: 1.12em; letter-spacing: 0;
-    color: var(--verde);
+    color: var(--terracota);
   }
 
   .selo-secao {
@@ -95,17 +98,17 @@
     transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
   }
   .botao:hover { transform: translateY(-2px); }
-  .botao--verde { background: var(--verde); color: var(--branco); box-shadow: 0 10px 22px rgba(15, 123, 95, .26); }
+  .botao--verde { background: var(--verde); color: var(--branco); box-shadow: 0 10px 22px rgba(75, 90, 50, .28); }
   .botao--verde:hover { background: var(--verde-escuro); }
   .botao--contorno { background: var(--branco); border-color: var(--tinta); }
-  .botao--amarelo { background: var(--amarelo); color: var(--tinta); }
+  .botao--terracota { background: var(--terracota); color: var(--branco); }
 
   /* Faixa verde e menu */
   .faixa-entrega {
     background: var(--verde); color: var(--branco);
     font-size: .86rem; font-weight: 600; text-align: center; padding: 7px 16px;
   }
-  .faixa-entrega svg { width: 18px; height: 18px; vertical-align: -4px; margin-right: 6px; fill: none; stroke: var(--amarelo); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .faixa-entrega svg { width: 18px; height: 18px; vertical-align: -4px; margin-right: 6px; fill: none; stroke: var(--terracota-claro); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
   .topo {
     position: sticky; top: 0; z-index: 50;
@@ -163,7 +166,7 @@
   .selo-novo {
     position: absolute; top: 18px; right: -8px; z-index: 2;
     display: grid; place-items: center; width: 78px; height: 78px;
-    background: var(--amarelo); color: var(--tinta);
+    background: var(--terracota); color: var(--branco);
     border-radius: 50%; font-weight: 800; font-size: 1.05rem;
     box-shadow: var(--sombra); transform: rotate(10deg);
   }
@@ -178,11 +181,11 @@
     padding: 4px 12px; background: rgba(255, 255, 255, .94); color: var(--tinta);
     border-radius: 999px; font-size: .78rem; font-weight: 700; line-height: 1.4;
   }
-  .grad-1 { background: linear-gradient(155deg, #0f7b5f, #7cc4a8 60%, #ffd166); }
-  .grad-2 { background: linear-gradient(155deg, #ffd166, #ffe9b0 50%, #a8dcc8); }
-  .grad-3 { background: linear-gradient(155deg, #0a4d3c, #0f7b5f 55%, #a8dcc8); }
-  .grad-4 { background: linear-gradient(155deg, #e3f2ed, #a8dcc8 55%, #0f7b5f); }
-  .grad-5 { background: linear-gradient(155deg, #f6e7c1, #ffd166 55%, #f2a65a); }
+  .grad-1 { background: linear-gradient(155deg, #4b5a32, #8f9a6a 55%, #d98b6b); }
+  .grad-2 { background: linear-gradient(155deg, #f4c9b5, #f6e3d6 50%, #b9c29a); }
+  .grad-3 { background: linear-gradient(155deg, #2f3a1f, #4b5a32 55%, #b9c29a); }
+  .grad-4 { background: linear-gradient(155deg, #e7eadb, #b9c29a 55%, #4b5a32); }
+  .grad-5 { background: linear-gradient(155deg, #f6e3d6, #d98b6b 55%, #b5563a); }
 
   /* Faixa de marcas */
   .faixa-marcas { margin-top: 16px; padding: 14px 0; overflow: hidden; border-block: 1px solid var(--linha); }
@@ -190,7 +193,7 @@
   .faixa-marcas:hover .faixa-trilho { animation-play-state: paused; }
   .faixa-trilho ul { display: flex; flex-shrink: 0; }
   .faixa-trilho li { padding-inline: 26px; position: relative; font-weight: 700; color: var(--suave); white-space: nowrap; }
-  .faixa-trilho li::after { content: ""; position: absolute; right: -3px; top: 50%; width: 6px; height: 6px; margin-top: -3px; background: var(--amarelo); border-radius: 50%; }
+  .faixa-trilho li::after { content: ""; position: absolute; right: -3px; top: 50%; width: 6px; height: 6px; margin-top: -3px; background: var(--terracota); border-radius: 50%; }
   @keyframes desliza { to { transform: translateX(-25%); } }
 
   /* 2. Sobre */
@@ -224,7 +227,7 @@
   .destaque-card:hover .play { transform: scale(1.1); }
   .destaque-info { padding: 18px 10px 0; }
   .destaque-numero { display: block; font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -.04em; color: var(--verde); }
-  .destaque-rotulo { display: inline-block; margin-top: 8px; padding: 2px 12px; background: var(--amarelo); border-radius: 999px; font-size: .82rem; font-weight: 700; }
+  .destaque-rotulo { display: inline-block; margin-top: 8px; padding: 2px 12px; background: var(--terracota-claro); color: var(--terracota-escuro); border-radius: 999px; font-size: .82rem; font-weight: 700; }
   .destaque-card h3 { margin-top: 14px; font-size: 1.22rem; font-weight: 800; line-height: 1.25; letter-spacing: -.01em; }
   .destaque-card p { margin-top: 6px; font-size: .95rem; color: var(--suave); }
 
@@ -251,12 +254,12 @@
     position: absolute; top: 10px; left: 10px; z-index: 1;
     display: flex; gap: 2px; padding: 5px 9px; background: var(--verde-escuro); border-radius: 999px;
   }
-  .estrelas svg { width: 13px; height: 13px; fill: var(--amarelo); }
+  .estrelas svg { width: 13px; height: 13px; fill: var(--terracota-claro); }
   .produto-info { display: flex; flex: 1; flex-direction: column; padding: 14px 8px 8px; }
   .produto h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
   .produto-meta { margin-top: 4px; font-size: .86rem; color: var(--suave); }
   .produto-rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 14px; }
-  .etiqueta { padding: 4px 12px; background: var(--amarelo); border-radius: 999px; font-size: .78rem; font-weight: 800; white-space: nowrap; }
+  .etiqueta { padding: 4px 12px; background: var(--terracota); color: var(--branco); border-radius: 999px; font-size: .78rem; font-weight: 800; white-space: nowrap; }
   .contratar {
     display: inline-flex; align-items: center; min-height: 44px; padding: 6px 16px;
     background: var(--verde); color: var(--branco); border-radius: 999px;
@@ -270,7 +273,7 @@
   .servico { padding: 28px; background: var(--branco); border-radius: var(--raio); box-shadow: var(--sombra); }
   .servico-numero {
     display: inline-grid; place-items: center; width: 48px; height: 48px;
-    background: var(--amarelo); border-radius: 16px; font-weight: 800;
+    background: var(--terracota); color: var(--branco); border-radius: 16px; font-weight: 800;
   }
   .servico h3 { margin-top: 18px; font-size: 1.25rem; font-weight: 800; line-height: 1.25; }
   .servico p { margin-top: 8px; color: var(--suave); }
@@ -283,7 +286,7 @@
   .metrica span.rotulo { display: block; margin-top: 8px; font-weight: 600; color: var(--suave); }
   .resultados { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
   .resultado { padding: 28px; background: var(--verde); color: var(--branco); border-radius: var(--raio); }
-  .resultado strong { display: block; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; color: var(--amarelo); }
+  .resultado strong { display: block; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; color: var(--terracota-claro); }
   .resultado h4 { margin: 12px 0 0; font-size: 1.1rem; font-weight: 800; }
   .resultado p { margin-top: 4px; font-size: .95rem; }
   .depoimentos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
@@ -311,7 +314,7 @@
     transition: transform .2s ease;
   }
   .canal:hover { transform: translateY(-2px); }
-  .canal svg { flex: none; width: 40px; height: 40px; padding: 9px; background: var(--amarelo); border-radius: 12px; fill: none; stroke: var(--tinta); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .canal svg { flex: none; width: 40px; height: 40px; padding: 9px; background: var(--terracota-claro); border-radius: 12px; fill: none; stroke: var(--terracota-escuro); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .canal b { display: block; font-weight: 800; line-height: 1.3; }
   .canal small { display: block; font-size: .88rem; color: var(--suave); overflow-wrap: anywhere; }
   .canal span { min-width: 0; }
@@ -321,7 +324,7 @@
   .campo span { display: block; margin-bottom: 6px; font-weight: 700; font-size: .94rem; }
   .campo input, .campo textarea {
     display: block; width: 100%; min-height: 50px; padding: 12px 16px;
-    background: var(--gelo); border: 2px solid #8a958f; border-radius: 16px;
+    background: var(--gelo); border: 2px solid #8c8a78; border-radius: 16px;
   }
   .campo textarea { min-height: 130px; resize: vertical; }
   .campo input:focus-visible, .campo textarea:focus-visible { border-color: var(--verde); border-radius: 16px; }
@@ -345,10 +348,10 @@
 
   /* Card de captura */
   .captura { width: min(440px, calc(100vw - 32px)); max-height: 90dvh; padding: 0; overflow: auto; background: var(--branco); color: var(--tinta); border: 0; border-radius: 30px; box-shadow: var(--sombra-forte); }
-  .captura::backdrop { background: rgba(10, 30, 24, .62); }
+  .captura::backdrop { background: rgba(31, 35, 26, .62); }
   .captura-corpo { position: relative; padding: 32px 28px 28px; }
   .captura-corpo:focus { outline: none; }
-  .captura-selo { display: inline-block; margin-bottom: 12px; padding: 3px 12px; background: var(--amarelo); border-radius: 999px; font-size: .8rem; font-weight: 800; }
+  .captura-selo { display: inline-block; margin-bottom: 12px; padding: 3px 12px; background: var(--terracota); color: var(--branco); border-radius: 999px; font-size: .8rem; font-weight: 800; }
   .captura h2 { padding-right: 36px; font-size: 1.7rem; font-weight: 800; line-height: 1.15; letter-spacing: -.02em; }
   .captura form { margin-top: 20px; }
   .captura-fechar {
