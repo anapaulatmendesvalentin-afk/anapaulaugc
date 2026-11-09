@@ -115,7 +115,7 @@
     background: var(--branco);
     border-bottom: 1px solid var(--linha);
   }
-  .topo-linha { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 66px; }
+  .topo-linha { display: flex; align-items: center; justify-content: flex-end; gap: 16px; min-height: 66px; }
   .marca-nome { font-weight: 800; font-size: 1.12rem; letter-spacing: -.02em; text-decoration: none; }
   .menu-lista { display: flex; align-items: center; gap: 4px; }
   .menu-lista a {
@@ -143,7 +143,7 @@
   /* 1. Capa */
   .capa { padding-top: 16px; }
   .capa-painel {
-    display: grid; grid-template-columns: 1.2fr .8fr;
+    display: grid; grid-template-columns: 1.1fr .9fr;
     grid-template-areas: "texto foto" "numeros foto";
     gap: 32px clamp(32px, 5vw, 64px);
     padding: clamp(24px, 5vw, 64px);
@@ -157,7 +157,7 @@
   }
   .capa-frase { max-width: 33em; margin-top: 22px; font-size: clamp(1.08rem, 1.7vw, 1.28rem); color: var(--suave); }
   .capa-botoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-  .capa-foto { grid-area: foto; position: relative; width: 100%; max-width: 440px; justify-self: end; align-self: center; }
+  .capa-foto { grid-area: foto; position: relative; width: 100%; max-width: 520px; justify-self: end; align-self: center; }
   .capa-numeros { grid-area: numeros; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-self: start; }
   .numero-mini { padding: 16px; background: var(--branco); border-radius: 20px; box-shadow: var(--sombra); }
   .numero-mini strong { display: block; font-size: clamp(1.45rem, 3vw, 2.1rem); font-weight: 800; line-height: 1.15; letter-spacing: -.03em; color: var(--verde); }
@@ -176,16 +176,18 @@
   .midia img { width: 100%; height: 100%; object-fit: cover; }
   /* Foto da capa sem moldura: o fundo branco some no fundo da capa
      e uma sombra suave fica atrás, como luz de estúdio */
-  .capa-foto-real { background: transparent; border-radius: 0; overflow: visible; }
+  /* A foto inteira aparece (formato 3:4, sem cortar o cabelo) */
+  .capa-foto-real { aspect-ratio: 3 / 4; background: transparent; border-radius: 0; overflow: visible; }
+  /* Sombra escura e esfumada do lado direito, de cima a baixo */
   .capa-foto-real::before {
-    content: ""; position: absolute; inset: 6% 2% 20% 16%;
-    background: radial-gradient(ellipse at 50% 45%, rgba(31, 35, 26, .22), rgba(31, 35, 26, 0) 70%);
-    filter: blur(22px); transform: translate(5%, 3%);
+    content: ""; position: absolute; top: 4%; bottom: 2%; left: 45%; right: -10%;
+    background: radial-gradient(ellipse 55% 60% at 55% 50%, rgba(31, 35, 26, .34), rgba(31, 35, 26, 0) 100%);
+    filter: blur(30px);
   }
   .capa-foto-real img {
-    position: relative; mix-blend-mode: multiply; object-position: 50% 52%;
-    -webkit-mask-image: linear-gradient(#000 80%, transparent 100%);
-    mask-image: linear-gradient(#000 80%, transparent 100%);
+    position: relative; mix-blend-mode: multiply; object-position: 50% 48%;
+    -webkit-mask-image: linear-gradient(#000 88%, transparent 98%);
+    mask-image: linear-gradient(#000 88%, transparent 98%);
   }
   .midia--4x5 { aspect-ratio: 4 / 5; }
   .midia--9x16 { aspect-ratio: 9 / 16; }
@@ -293,7 +295,7 @@
 
   /* 6. Números e depoimentos */
   .subtitulo { margin: clamp(44px, 6vw, 64px) 0 20px; font-size: 1.35rem; font-weight: 800; letter-spacing: -.01em; }
-  .metricas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .metricas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
   .metrica { padding: 26px 22px; background: var(--gelo); border-radius: var(--raio); }
   .metrica strong { display: block; font-size: clamp(2.3rem, 5vw, 3.6rem); font-weight: 800; line-height: 1; letter-spacing: -.04em; color: var(--verde); }
   .metrica span.rotulo { display: block; margin-top: 8px; font-weight: 600; color: var(--suave); }
@@ -380,7 +382,7 @@
   /* Tablet */
   @media (max-width: 1040px) {
     .produtos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .metricas, .depoimentos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .depoimentos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .servicos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   /* Menu vira hambúrguer */
@@ -394,7 +396,7 @@
     .menu-lista.aberto { display: flex; }
     .menu-lista a { padding: 12px 14px; font-size: 1.05rem; }
     .capa-painel { grid-template-columns: minmax(0, 1fr); grid-template-areas: "texto" "foto" "numeros"; }
-    .capa-foto { justify-self: center; max-width: 400px; }
+    .capa-foto { justify-self: center; max-width: 460px; }
     .selo-novo { right: -4px; }
     .sobre-grade, .contato-grade { grid-template-columns: minmax(0, 1fr); }
     .sobre-foto { max-width: 420px; width: 100%; margin-inline: auto; }
@@ -450,15 +452,12 @@
 <!-- Menu fixo -->
 <header class="topo">
   <div class="caixa topo-linha">
-    <a class="marca-nome" href="#inicio">Ana Paula Mendes</a>
     <nav aria-label="Menu principal">
       <button class="menu-botao" id="menuBotao" type="button" aria-expanded="false" aria-controls="menuLista" aria-label="Abrir menu"><span></span></button>
       <ul class="menu-lista" id="menuLista">
         <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#destaques">Destaques</a></li>
         <li><a href="#trabalhos">Trabalhos</a></li>
         <li><a href="#servicos">Serviços</a></li>
-        <li><a href="#numeros">Números</a></li>
         <li><a href="#contato">Contato</a></li>
       </ul>
     </nav>
@@ -689,8 +688,8 @@ const DESTAQUES = [
     link: "https://youtube.com/shorts/-Ied1Ga21Uc",
     capa: "",
     alt: "Capa do vídeo para Theoric",
-    numero: "+00K", // TROCAR pelo número real
-    rotulo: "views no shorts", // TROCAR se o número medir outra coisa
+    numero: "", // opcional: um número forte, exemplo "+2,4M". Vazio não aparece.
+    rotulo: "", // opcional: o que o número mede
     titulo: "Vídeo UGC para Theoric",
     contexto: "Vídeo curto vertical publicado no YouTube Shorts."
   },
@@ -698,8 +697,8 @@ const DESTAQUES = [
     link: "https://youtube.com/shorts/1I0HnNexCXM",
     capa: "",
     alt: "Capa do primeiro vídeo para Rosa Selvagem",
-    numero: "+00K", // TROCAR pelo número real
-    rotulo: "views no shorts", // TROCAR se o número medir outra coisa
+    numero: "", // opcional: um número forte, exemplo "+2,4M". Vazio não aparece.
+    rotulo: "", // opcional: o que o número mede
     titulo: "Vídeo UGC para Rosa Selvagem",
     contexto: "Vídeo curto vertical publicado no YouTube Shorts."
   },
@@ -707,8 +706,8 @@ const DESTAQUES = [
     link: "https://youtube.com/shorts/frkO46za0k0",
     capa: "",
     alt: "Capa do segundo vídeo para Rosa Selvagem",
-    numero: "+00K", // TROCAR pelo número real
-    rotulo: "views no shorts", // TROCAR se o número medir outra coisa
+    numero: "", // opcional: um número forte, exemplo "+2,4M". Vazio não aparece.
+    rotulo: "", // opcional: o que o número mede
     titulo: "Rosa Selvagem, segundo vídeo",
     contexto: "Vídeo curto vertical publicado no YouTube Shorts."
   }
@@ -760,7 +759,6 @@ const SERVICOS = [
 const METRICAS = [
   { valor: 50, prefixo: "+", sufixo: "",  rotulo: "vídeos entregues" },
   { valor: 8,  prefixo: "",  sufixo: "",  rotulo: "marcas atendidas" },
-  { valor: 0,  prefixo: "+", sufixo: "K", rotulo: "views somadas", zeros: 2 }, // TROCAR pelo total real de views
   { valor: 5,  prefixo: "",  sufixo: "",  rotulo: "nichos atendidos" }
 ];
 
@@ -834,8 +832,8 @@ const DEPOIMENTOS = [
         '<span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>' +
       "</div>" +
       '<div class="destaque-info">' +
-        '<strong class="destaque-numero">' + esc(d.numero) + "</strong>" +
-        '<span class="destaque-rotulo">' + esc(d.rotulo) + "</span>" +
+        (d.numero ? '<strong class="destaque-numero">' + esc(d.numero) + "</strong>" : "") +
+        (d.rotulo ? '<span class="destaque-rotulo">' + esc(d.rotulo) + "</span>" : "") +
         "<h3>" + esc(d.titulo) + "</h3>" +
         "<p>" + esc(d.contexto) + "</p>" +
         '<span class="so-leitor"> (abre o vídeo em nova aba)</span>' +
