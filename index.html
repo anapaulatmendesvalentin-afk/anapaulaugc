@@ -174,6 +174,8 @@
   /* Blocos de foto e vídeo: degradê com legenda do formato */
   .midia { position: relative; display: block; width: 100%; overflow: hidden; border-radius: var(--raio); background: var(--verde-claro); }
   .midia img { width: 100%; height: 100%; object-fit: cover; }
+  .capa-foto-real { background: var(--branco); box-shadow: var(--sombra); }
+  .capa-foto-real img { object-position: 50% 52%; }
   .midia--4x5 { aspect-ratio: 4 / 5; }
   .midia--9x16 { aspect-ratio: 9 / 16; }
   .legenda {
@@ -470,11 +472,10 @@
 
         <div class="capa-foto">
           <span class="selo-novo">novo</span>
-          <!-- COMO TROCAR A FOTO DA CAPA: apague o div abaixo e coloque no lugar
-               <div class="midia midia--4x5"><img src="minha-foto.jpg" alt="Ana Paula Mendes segurando um produto" width="800" height="1000"></div>
-               Salve a foto na mesma pasta do index.html, em JPG ou WebP com até 200 KB. -->
-          <div class="midia midia--4x5 grad-1" role="img" aria-label="Espaço para a foto de Ana Paula Mendes, formato 4:5">
-            <span class="legenda">foto da creator 4:5</span>
+          <!-- FOTO DA CAPA: o arquivo foto-capa.webp fica na mesma pasta do index.html.
+               Para trocar, envie outra foto com o mesmo nome ou mude o src abaixo. -->
+          <div class="midia midia--4x5 capa-foto-real">
+            <img src="foto-capa.webp" alt="Ana Paula Mendes sorrindo, de cabelo cacheado e blusa branca de cetim" width="1080" height="1920" fetchpriority="high">
           </div>
         </div>
 
