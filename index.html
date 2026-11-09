@@ -169,8 +169,8 @@
   .midia img { width: 100%; height: 100%; object-fit: cover; }
   /* Foto da capa sem moldura: o fundo branco some no fundo da capa
      e uma sombra suave fica atrás, como luz de estúdio */
-  /* A foto inteira aparece (formato 3:4, sem cortar o cabelo) */
-  .capa-foto-real { aspect-ratio: 3 / 4; background: transparent; border-radius: 0; overflow: visible; }
+  /* A foto aparece completa, com folga acima do cabelo e nas laterais */
+  .midia.capa-foto-real { aspect-ratio: 1080 / 1550; background: transparent; border-radius: 0; overflow: visible; }
   /* Sombra escura e esfumada do lado direito, de cima a baixo */
   .capa-foto-real::before {
     content: ""; position: absolute; top: 4%; bottom: 2%; left: 45%; right: -10%;
@@ -178,9 +178,9 @@
     filter: blur(30px);
   }
   .capa-foto-real img {
-    position: relative; mix-blend-mode: multiply; object-position: 50% 48%;
-    -webkit-mask-image: linear-gradient(#000 94%, transparent 99%);
-    mask-image: linear-gradient(#000 94%, transparent 99%);
+    position: relative; mix-blend-mode: multiply; object-position: 50% 40%;
+    -webkit-mask-image: linear-gradient(#000 93%, transparent 96.5%);
+    mask-image: linear-gradient(#000 93%, transparent 96.5%);
   }
   .midia--4x5 { aspect-ratio: 4 / 5; }
   .midia--9x16 { aspect-ratio: 9 / 16; }
