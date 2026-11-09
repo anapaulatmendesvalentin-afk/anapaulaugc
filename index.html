@@ -159,7 +159,7 @@
   .capa-frase { max-width: 33em; margin-top: 22px; font-size: clamp(1.08rem, 1.7vw, 1.28rem); color: var(--suave); }
   .capa-botoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
   .capa-foto { grid-area: foto; position: relative; width: 100%; max-width: 620px; justify-self: end; align-self: end; }
-  .capa-numeros { grid-area: numeros; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-self: start; margin-bottom: clamp(24px, 4vw, 48px); }
+  .capa-numeros { grid-area: numeros; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 420px; gap: 12px; align-self: start; margin-bottom: clamp(24px, 4vw, 48px); }
   .numero-mini { padding: 16px; background: var(--branco); border-radius: 20px; box-shadow: var(--sombra); }
   .numero-mini strong { display: block; font-size: clamp(1.45rem, 3vw, 2.1rem); font-weight: 800; line-height: 1.15; letter-spacing: -.03em; color: var(--verde); }
   .numero-mini span.rotulo { display: block; margin-top: 2px; font-size: .84rem; font-weight: 600; line-height: 1.3; color: var(--suave); }
@@ -742,13 +742,13 @@ const SERVICOS = [
   { titulo: "Pacote mensal", descricao: "Um volume combinado de conteúdos todo mês, para a sua marca nunca sumir do feed." }
 ];
 
-/* METRICAS: as três primeiras também aparecem na capa.
+/* METRICAS: as duas primeiras também aparecem na capa.
    valor    = número final do contador.
    decimais = casas depois da vírgula. Para 2,4M use valor: 2.4, decimais: 1, sufixo: "M".
    zeros    = só para o número provisório aparecer como 00. */
 const METRICAS = [
   { valor: 50, prefixo: "+", sufixo: "",  rotulo: "vídeos entregues" },
-  { valor: 8,  prefixo: "",  sufixo: "",  rotulo: "marcas atendidas" },
+  { valor: 30, prefixo: "+", sufixo: "",  rotulo: "marcas atendidas" },
   { valor: 5,  prefixo: "",  sufixo: "",  rotulo: "nichos atendidos" }
 ];
 
@@ -805,7 +805,7 @@ const DEPOIMENTOS = [
   }
 
   /* Capa: três números */
-  $("capaNumeros").innerHTML = METRICAS.slice(0, 3).map((m, i) =>
+  $("capaNumeros").innerHTML = METRICAS.slice(0, 2).map((m, i) =>
     '<li class="numero-mini">' + htmlContador(m, i) + '<span class="rotulo">' + esc(m.rotulo) + "</span></li>"
   ).join("");
 
