@@ -143,9 +143,9 @@
   /* 1. Capa */
   .capa { padding-top: 16px; }
   .capa-painel {
-    display: grid; grid-template-columns: 1.1fr .9fr;
+    display: grid; grid-template-columns: 1fr 1fr;
     grid-template-areas: "texto foto" "numeros foto";
-    gap: 32px clamp(32px, 5vw, 64px);
+    gap: 32px clamp(24px, 3vw, 40px);
     padding: clamp(24px, 5vw, 64px);
     background: var(--gelo); border-radius: var(--raio-grande);
   }
@@ -157,19 +157,12 @@
   }
   .capa-frase { max-width: 33em; margin-top: 22px; font-size: clamp(1.08rem, 1.7vw, 1.28rem); color: var(--suave); }
   .capa-botoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-  .capa-foto { grid-area: foto; position: relative; width: 100%; max-width: 520px; justify-self: end; align-self: center; }
+  .capa-foto { grid-area: foto; position: relative; width: 100%; max-width: 620px; justify-self: end; align-self: center; }
   .capa-numeros { grid-area: numeros; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-self: start; }
   .numero-mini { padding: 16px; background: var(--branco); border-radius: 20px; box-shadow: var(--sombra); }
   .numero-mini strong { display: block; font-size: clamp(1.45rem, 3vw, 2.1rem); font-weight: 800; line-height: 1.15; letter-spacing: -.03em; color: var(--verde); }
   .numero-mini span.rotulo { display: block; margin-top: 2px; font-size: .84rem; font-weight: 600; line-height: 1.3; color: var(--suave); }
 
-  .selo-novo {
-    position: absolute; top: 18px; right: -8px; z-index: 2;
-    display: grid; place-items: center; width: 78px; height: 78px;
-    background: var(--terracota); color: var(--branco);
-    border-radius: 50%; font-weight: 800; font-size: 1.05rem;
-    box-shadow: var(--sombra); transform: rotate(10deg);
-  }
 
   /* Blocos de foto e vídeo: degradê com legenda do formato */
   .midia { position: relative; display: block; width: 100%; overflow: hidden; border-radius: var(--raio); background: var(--verde-claro); }
@@ -186,8 +179,8 @@
   }
   .capa-foto-real img {
     position: relative; mix-blend-mode: multiply; object-position: 50% 48%;
-    -webkit-mask-image: linear-gradient(#000 88%, transparent 98%);
-    mask-image: linear-gradient(#000 88%, transparent 98%);
+    -webkit-mask-image: linear-gradient(#000 94%, transparent 99%);
+    mask-image: linear-gradient(#000 94%, transparent 99%);
   }
   .midia--4x5 { aspect-ratio: 4 / 5; }
   .midia--9x16 { aspect-ratio: 9 / 16; }
@@ -396,8 +389,7 @@
     .menu-lista.aberto { display: flex; }
     .menu-lista a { padding: 12px 14px; font-size: 1.05rem; }
     .capa-painel { grid-template-columns: minmax(0, 1fr); grid-template-areas: "texto" "foto" "numeros"; }
-    .capa-foto { justify-self: center; max-width: 460px; }
-    .selo-novo { right: -4px; }
+    .capa-foto { justify-self: center; max-width: 560px; }
     .sobre-grade, .contato-grade { grid-template-columns: minmax(0, 1fr); }
     .sobre-foto { max-width: 420px; width: 100%; margin-inline: auto; }
     .resultados { grid-template-columns: minmax(0, 1fr); }
@@ -417,7 +409,6 @@
     .metricas { gap: 10px; }
     .metrica { padding: 20px 16px; }
     .depoimentos { grid-template-columns: minmax(0, 1fr); }
-    .selo-novo { width: 66px; height: 66px; font-size: .95rem; }
   }
 
   /* Respeita quem prefere menos movimento */
@@ -481,7 +472,6 @@
         </div>
 
         <div class="capa-foto">
-          <span class="selo-novo">novo</span>
           <!-- FOTO DA CAPA: o arquivo foto-capa.webp fica na mesma pasta do index.html.
                Para trocar, envie outra foto com o mesmo nome ou mude o src abaixo. -->
           <div class="midia midia--4x5 capa-foto-real">
