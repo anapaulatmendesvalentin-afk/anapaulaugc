@@ -146,8 +146,9 @@
     display: grid; grid-template-columns: 1fr 1fr;
     grid-template-areas: "texto foto" "numeros foto";
     gap: 32px clamp(24px, 3vw, 40px);
-    padding: clamp(24px, 5vw, 64px);
-    background: var(--gelo); border-radius: var(--raio-grande);
+    /* Sem borda embaixo: a capa termina junto com a foto */
+    padding: clamp(20px, 3vw, 36px) clamp(24px, 5vw, 64px) 0;
+    background: var(--gelo); border-radius: var(--raio-grande); overflow: hidden;
   }
   .capa-texto { grid-area: texto; min-width: 0; align-self: end; }
   .capa-nome {
@@ -157,8 +158,8 @@
   }
   .capa-frase { max-width: 33em; margin-top: 22px; font-size: clamp(1.08rem, 1.7vw, 1.28rem); color: var(--suave); }
   .capa-botoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-  .capa-foto { grid-area: foto; position: relative; width: 100%; max-width: 620px; justify-self: end; align-self: center; }
-  .capa-numeros { grid-area: numeros; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-self: start; }
+  .capa-foto { grid-area: foto; position: relative; width: 100%; max-width: 620px; justify-self: end; align-self: end; }
+  .capa-numeros { grid-area: numeros; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-self: start; margin-bottom: clamp(24px, 4vw, 48px); }
   .numero-mini { padding: 16px; background: var(--branco); border-radius: 20px; box-shadow: var(--sombra); }
   .numero-mini strong { display: block; font-size: clamp(1.45rem, 3vw, 2.1rem); font-weight: 800; line-height: 1.15; letter-spacing: -.03em; color: var(--verde); }
   .numero-mini span.rotulo { display: block; margin-top: 2px; font-size: .84rem; font-weight: 600; line-height: 1.3; color: var(--suave); }
@@ -170,7 +171,7 @@
   /* Foto da capa sem moldura: o fundo branco some no fundo da capa
      e uma sombra suave fica atrás, como luz de estúdio */
   /* A foto aparece completa, com folga acima do cabelo e nas laterais */
-  .midia.capa-foto-real { aspect-ratio: 1080 / 1550; background: transparent; border-radius: 0; overflow: visible; }
+  .midia.capa-foto-real { aspect-ratio: 1080 / 1448; background: transparent; border-radius: 0; overflow: visible; }
   /* Sombra escura e esfumada do lado direito, de cima a baixo */
   .capa-foto-real::before {
     content: ""; position: absolute; top: 4%; bottom: 2%; left: 45%; right: -10%;
@@ -178,9 +179,7 @@
     filter: blur(30px);
   }
   .capa-foto-real img {
-    position: relative; mix-blend-mode: multiply; object-position: 50% 40%;
-    -webkit-mask-image: linear-gradient(#000 93%, transparent 96.5%);
-    mask-image: linear-gradient(#000 93%, transparent 96.5%);
+    position: relative; mix-blend-mode: multiply; object-position: 50% 39.2%;
   }
   .midia--4x5 { aspect-ratio: 4 / 5; }
   .midia--9x16 { aspect-ratio: 9 / 16; }
@@ -388,7 +387,8 @@
     }
     .menu-lista.aberto { display: flex; }
     .menu-lista a { padding: 12px 14px; font-size: 1.05rem; }
-    .capa-painel { grid-template-columns: minmax(0, 1fr); grid-template-areas: "texto" "foto" "numeros"; }
+    .capa-painel { grid-template-columns: minmax(0, 1fr); grid-template-areas: "texto" "numeros" "foto"; }
+    .capa-numeros { margin-bottom: 0; }
     .capa-foto { justify-self: center; max-width: 560px; }
     .sobre-grade, .contato-grade { grid-template-columns: minmax(0, 1fr); }
     .sobre-foto { max-width: 420px; width: 100%; margin-inline: auto; }
