@@ -195,12 +195,25 @@
   .grad-5 { background: linear-gradient(155deg, #f6e3d6, #d98b6b 55%, #b5563a); }
 
   /* Faixa de marcas */
-  .faixa-marcas { margin-top: 16px; padding: 14px 0; overflow: hidden; border-block: 1px solid var(--linha); }
-  .faixa-trilho { display: flex; width: max-content; animation: desliza 34s linear infinite; }
+  /* Carrossel de logos: anda da direita para a esquerda sem parar */
+  .faixa-marcas { margin-top: 20px; padding: 26px 0 30px; border-block: 1px solid var(--linha); }
+  .faixa-titulo {
+    display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 20px;
+    font-size: .78rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--suave); text-align: center;
+  }
+  .faixa-titulo::before, .faixa-titulo::after { content: ""; width: 40px; height: 1px; background: var(--linha); flex: none; }
+  .faixa-janela { overflow: hidden; padding-block: 8px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .faixa-trilho { display: flex; width: max-content; animation: desliza 40s linear infinite; }
   .faixa-marcas:hover .faixa-trilho { animation-play-state: paused; }
   .faixa-trilho ul { display: flex; flex-shrink: 0; }
-  .faixa-trilho li { padding-inline: 26px; position: relative; font-weight: 700; color: var(--suave); white-space: nowrap; }
-  .faixa-trilho li::after { content: ""; position: absolute; right: -3px; top: 50%; width: 6px; height: 6px; margin-top: -3px; background: var(--terracota); border-radius: 50%; }
+  .faixa-trilho li { flex: none; padding-inline: 12px; }
+  .logo-marca {
+    display: block; width: 104px; height: 104px; border-radius: 50%; overflow: hidden;
+    background: var(--branco); border: 1px solid var(--linha); box-shadow: var(--sombra);
+  }
+  .logo-marca img { width: 100%; height: 100%; object-fit: cover; }
   @keyframes desliza { to { transform: translateX(-25%); } }
 
   /* 2. Sobre */
@@ -405,6 +418,10 @@
   }
   @media (max-width: 520px) {
     .numero-mini { padding: 12px 10px; }
+    .logo-marca { width: 84px; height: 84px; }
+    .faixa-trilho li { padding-inline: 8px; }
+    .faixa-titulo { letter-spacing: .14em; }
+    .faixa-titulo::before, .faixa-titulo::after { width: 20px; }
     .numero-mini span.rotulo { font-size: .76rem; }
     .metricas { gap: 10px; }
     .metrica { padding: 20px 16px; }
@@ -418,7 +435,7 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; animation: none !important; }
     .faixa-trilho { width: auto; justify-content: center; }
-    .faixa-trilho ul { flex-wrap: wrap; justify-content: center; row-gap: 6px; flex-shrink: 1; }
+    .faixa-trilho ul { flex-wrap: wrap; justify-content: center; row-gap: 16px; flex-shrink: 1; }
     .faixa-trilho ul[aria-hidden="true"] { display: none; }
     .oculto { opacity: 1; transform: none; }
   }
@@ -483,8 +500,9 @@
         <ul class="capa-numeros" id="capaNumeros"></ul>
       </div>
 
-      <div class="faixa-marcas" role="group" aria-label="Marcas com quem já trabalhei">
-        <div class="faixa-trilho" id="faixaMarcas"></div>
+      <div class="faixa-marcas" role="group" aria-labelledby="faixaTitulo">
+        <p class="faixa-titulo" id="faixaTitulo">Marcas que confiam no meu trabalho</p>
+        <div class="faixa-janela"><div class="faixa-trilho" id="faixaMarcas"></div></div>
       </div>
     </div>
   </section>
@@ -664,8 +682,20 @@ const CONTATO = {
    por um botão de WhatsApp ou e-mail, já com o texto pronto. */
 const ENDERECO_FORMULARIO = ""; // TROCAR
 
-/* MARCAS: faixa fina que fecha a capa. */
-const MARCAS = ["Knut", "Hostgator", "Rosa Selvagem", "Trimod", "Beyoung", "Mais Blond", "Loreal", "O Boticário"];
+/* MARCAS: carrossel de logos que fecha a capa.
+   nome = nome da marca (lido por leitores de tela).
+   logo = arquivo da logo na mesma pasta do index.html, quadrado (ex.: 320x320).
+   Para adicionar uma marca, envie a logo e acrescente uma linha aqui. */
+const MARCAS = [
+  { nome: "Radiance",       logo: "logo-radiance.webp" },
+  { nome: "NutriMel",       logo: "logo-nutrimel.webp" },
+  { nome: "O.U.i",          logo: "logo-oui.webp" },
+  { nome: "Ailos",          logo: "logo-ailos.webp" },
+  { nome: "HostGator",      logo: "logo-hostgator.webp" },
+  { nome: "Tetra Pak",      logo: "logo-tetrapak.webp" },
+  { nome: "L'Oréal",        logo: "logo-loreal.webp" },
+  { nome: "Beyoung",        logo: "logo-beyoung.webp" }
+];
 
 /* DESTAQUES: os três vídeos grandes.
    link   = AQUI ENTRA O LINK DO VÍDEO. O card inteiro abre esse endereço.
@@ -810,9 +840,10 @@ const DEPOIMENTOS = [
   ).join("");
 
   /* Capa: faixa de marcas. As cópias extras fazem a faixa rodar sem emenda. */
-  const listaMarcas = MARCAS.map((m) => "<li>" + esc(m) + "</li>").join("");
-  $("faixaMarcas").innerHTML = "<ul>" + listaMarcas + "</ul>" +
-    ('<ul aria-hidden="true">' + listaMarcas + "</ul>").repeat(3);
+  const logoMarca = (m, comAlt) =>
+    '<li><span class="logo-marca"><img src="' + esc(m.logo) + '" alt="' + (comAlt ? esc(m.nome) : "") + '" width="320" height="320"></span></li>';
+  $("faixaMarcas").innerHTML = "<ul>" + MARCAS.map((m) => logoMarca(m, true)).join("") + "</ul>" +
+    ('<ul aria-hidden="true">' + MARCAS.map((m) => logoMarca(m, false)).join("") + "</ul>").repeat(3);
 
   /* Destaques: AQUI o "link" vira o endereço do card e a "capa" vira a imagem */
   $("listaDestaques").innerHTML = DESTAQUES.map((d, i) =>
