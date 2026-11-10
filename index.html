@@ -290,9 +290,11 @@
   /* O player é mais alto que o card: o vídeo ocupa o card inteiro e as faixas
      de cima e de baixo, onde o YouTube põe título, canal e logo, ficam cortadas.
      Ele só aparece quando o vídeo já está rodando, e não recebe cliques. */
+  /* O player é criado com o dobro do tamanho e reduzido pela metade:
+     assim o YouTube entrega o vídeo em qualidade maior. */
   .video-player {
-    position: absolute; top: 50%; left: 0; width: 100%; height: calc(100% + 180px); border: 0;
-    transform: translateY(-50%); pointer-events: none;
+    position: absolute; top: 50%; left: 50%; width: 200%; height: calc(200% + 360px); border: 0;
+    transform: translate(-50%, -50%) scale(.5); pointer-events: none;
     opacity: 0; transition: opacity .3s ease;
   }
   .video-frame.rodando .video-player { opacity: 1; }
@@ -973,7 +975,8 @@ const DEPOIMENTOS = [
         const rotulo = "Assistir vídeo" + (v.marca ? " para " + v.marca : "") + ", " + n.nome;
         return '<li class="video-card">' +
           '<div class="video-frame" data-yt="' + esc(v.yt) + '">' +
-            '<img class="video-thumb" src="https://i.ytimg.com/vi/' + esc(v.yt) + '/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">' +
+            '<img class="video-thumb" src="https://i.ytimg.com/vi/' + esc(v.yt) + '/oar2.jpg" alt="" loading="lazy" decoding="async" width="1080" height="1920"' +
+              ' onerror="this.onerror=null;this.src=\'https://i.ytimg.com/vi/' + esc(v.yt) + '/hqdefault.jpg\'">' +
             '<div class="video-capa" aria-hidden="true">' +
               (v.marca ? '<span class="video-selo">' + esc(v.marca) + "</span>" : "") +
               '<span class="video-titulo">' + esc(v.marca || n.nome) + "</span>" +
