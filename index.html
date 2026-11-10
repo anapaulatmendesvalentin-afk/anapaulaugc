@@ -35,7 +35,8 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  /* Base um pouco maior: todos os textos crescem juntos, na mesma proporção */
+  html { -webkit-text-size-adjust: 100%; font-size: 106.25%; }
   body {
     margin: 0;
     background: var(--branco);
@@ -83,6 +84,8 @@
     background: var(--verde-claro); color: var(--verde-escuro);
     border-radius: 999px; font-size: .82rem; font-weight: 700;
   }
+  /* Selo da capa (UGC Creator 35+) maior, para ler de longe */
+  .capa-texto .selo-secao { padding: 8px 20px; margin-bottom: 18px; font-size: 1.08rem; font-weight: 800; letter-spacing: .01em; }
   .titulo-secao {
     font-size: clamp(2.1rem, 5vw, 3.4rem); line-height: 1.08;
     font-weight: 800; letter-spacing: -.03em;
@@ -203,9 +206,9 @@
   .faixa-trilho { display: flex; width: max-content; animation: desliza 60s linear infinite; }
   .faixa-marcas:hover .faixa-trilho { animation-play-state: paused; }
   .faixa-trilho ul { display: flex; flex-shrink: 0; }
-  .faixa-trilho li { flex: none; padding-inline: 12px; }
+  .faixa-trilho li { flex: none; padding-inline: 16px; }
   .logo-marca {
-    display: block; width: 88px; height: 88px; border-radius: 50%; overflow: hidden;
+    display: block; width: 112px; height: 112px; border-radius: 50%; overflow: hidden;
     background: var(--branco); border: 1px solid var(--linha); box-shadow: var(--sombra);
   }
   .logo-marca img { width: 100%; height: 100%; object-fit: cover; }
