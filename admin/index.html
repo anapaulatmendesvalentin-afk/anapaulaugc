@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel | Ana Paula</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<!-- A página fica escondida até conferir a sessão. Sem sessão, vai para o login. -->
+<div class="app" id="app" hidden>
+
+  <aside class="menu" id="menu" aria-label="Menu do painel">
+    <div class="menu-topo">
+      <span class="menu-marca">Painel</span>
+      <button class="icone-botao so-celular" type="button" id="fecharMenu" aria-label="Fechar menu">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <nav>
+      <p class="menu-grupo">Meu site</p>
+      <a class="menu-item" href="#portfolio" data-aba="portfolio">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>Portfólio</a>
+      <a class="menu-item" href="#marcas" data-aba="marcas">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg>Marcas</a>
+      <p class="menu-grupo">Minha rotina</p>
+      <a class="menu-item" href="#calendario" data-aba="calendario">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendário</a>
+      <a class="menu-item" href="#campanhas" data-aba="campanhas">
+        <svg viewBox="0 0 24 24"><path d="M3 10v4h4l7 4V6L7 10z"/><path d="M17 9a4 4 0 0 1 0 6"/></svg>Campanhas</a>
+      <a class="menu-item" href="#checklist" data-aba="checklist">
+        <svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5 2.5-2.5M3.5 18l1.5 1.5 2.5-2.5"/></svg>Checklist</a>
+    </nav>
+    <div class="menu-rodape">
+      <span class="menu-email" id="menuEmail"></span>
+      <button class="botao botao--leve" type="button" id="sair">
+        <svg viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>Sair</button>
+    </div>
+  </aside>
+  <div class="menu-fundo" id="menuFundo" hidden></div>
+
+  <main class="conteudo">
+    <header class="topo">
+      <button class="icone-botao so-celular" type="button" id="abrirMenu" aria-label="Abrir menu" aria-controls="menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <h1 id="tituloAba">Portfólio</h1>
+      <a class="topo-link" href="../" target="_blank" rel="noopener">Ver o site</a>
+    </header>
+    <div id="avisos" class="avisos" role="status"></div>
+    <section id="area" class="area" tabindex="-1"></section>
+  </main>
+</div>
+
+<dialog class="janela" id="janela" aria-labelledby="janelaTitulo">
+  <form method="dialog" class="janela-caixa" id="janelaForm">
+    <header class="janela-topo">
+      <h2 id="janelaTitulo"></h2>
+      <button class="icone-botao" type="button" id="janelaFechar" aria-label="Fechar">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </header>
+    <div class="janela-corpo" id="janelaCorpo"></div>
+    <footer class="janela-rodape" id="janelaRodape"></footer>
+  </form>
+</dialog>
+
+<div class="aviso-rapido" id="avisoRapido" role="status" aria-live="polite" hidden></div>
+
+<noscript><p style="padding:16px">Para usar o painel, ative o JavaScript.</p></noscript>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<script src="../js/banco.js"></script>
+<script src="../js/biblioteca.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
