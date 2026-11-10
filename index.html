@@ -218,8 +218,7 @@
 
   /* 2. Sobre */
   .sobre-grade { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
-  /* Moldura no formato da foto (9:16), para nada ser cortado */
-  .sobre-foto { width: 100%; max-width: 420px; justify-self: center; box-shadow: var(--sombra-forte); border-radius: var(--raio-grande); }
+  .sobre-foto { box-shadow: var(--sombra-forte); border-radius: var(--raio-grande); }
   .sobre-foto .midia { border-radius: var(--raio-grande); }
   .sobre-texto p { margin-top: 18px; font-size: 1.08rem; color: var(--suave); }
   .promessas { display: grid; gap: 12px; margin-top: 28px; }
@@ -513,8 +512,8 @@
       <div class="sobre-foto" data-revelar>
         <!-- FOTO DO SOBRE MIM (foto real): o arquivo foto-sobre.webp fica na mesma pasta do index.html.
              Para trocar, envie outra foto com o mesmo nome ou mude o src abaixo. -->
-        <div class="midia midia--9x16">
-          <img src="foto-sobre.webp" alt="Ana Paula Mendes sorrindo, com roupa fitness clara, em frente a uma parede lilás com plumas" width="1080" height="1920" loading="lazy">
+        <div class="midia midia--4x5">
+          <img src="foto-sobre.webp" alt="Ana Paula Mendes sorrindo, com roupa fitness clara, em frente a uma parede lilás com plumas" width="1080" height="1920" loading="lazy" style="object-position: 50% 20%">
         </div>
       </div>
       <div class="sobre-texto" data-revelar>
