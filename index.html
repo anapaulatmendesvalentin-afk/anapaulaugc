@@ -278,7 +278,9 @@
   }
   .seta:hover { background: var(--verde-claro); }
   .videos-linha {
-    display: grid; grid-auto-flow: column; grid-auto-columns: clamp(160px, 19vw, 220px); gap: 16px;
+    /* 4 vídeos ocupam a largura toda; a partir do 5º aparecem as setas */
+    --por-linha: 4;
+    display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - (var(--por-linha) - 1) * 16px) / var(--por-linha)); gap: 16px;
     overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; padding: 4px 2px 12px;
     scrollbar-width: thin; scrollbar-color: var(--linha) transparent;
   }
@@ -291,6 +293,7 @@
   .video-play .play { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
   .video-play .play svg { width: 22px; height: 22px; }
   .video-play:hover .play { transform: scale(1.1); }
+  @media (max-width: 720px) { .videos-linha { --por-linha: 2; } }
   .video-marca { margin-top: 8px; font-size: .92rem; font-weight: 700; text-align: center; }
   .produtos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
   .produto {
