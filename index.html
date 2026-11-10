@@ -262,6 +262,53 @@
   .filtro:hover { background: var(--verde-claro); }
   .filtro[aria-pressed="true"] { background: var(--verde); color: var(--branco); }
   a.filtro { display: inline-flex; align-items: center; text-decoration: none; }
+
+  /* Botão de idioma PT / EN no cabeçalho */
+  .idioma { display: flex; flex: none; gap: 2px; margin-left: 12px; padding: 3px; border: 1px solid var(--linha); border-radius: 999px; background: var(--branco); }
+  .idioma button {
+    min-width: 40px; height: 36px; padding: 0 10px; border: 0; border-radius: 999px;
+    background: transparent; color: var(--suave); font-size: .8rem; font-weight: 800; letter-spacing: .04em; cursor: pointer;
+  }
+  .idioma button[aria-pressed="true"] { background: var(--verde-escuro); color: var(--branco); }
+
+  /* Serviços: "O que podemos criar juntos?" */
+  .cabeca-centro { max-width: 760px; margin: 0 auto clamp(36px, 5vw, 56px); text-align: center; }
+  .eyebrow-linhas {
+    display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 14px;
+    font-size: .78rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--verde);
+  }
+  .eyebrow-linhas::before, .eyebrow-linhas::after { content: ""; width: 36px; height: 1px; background: currentColor; }
+  .planos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
+  .plano {
+    position: relative; display: flex; flex-direction: column; padding: 30px 26px 26px;
+    background: var(--branco); border: 1px solid var(--linha); border-radius: var(--raio); box-shadow: var(--sombra);
+  }
+  .plano-selo {
+    position: absolute; top: -12px; left: 24px; padding: 4px 12px;
+    background: var(--terracota-claro); color: var(--terracota-escuro); border-radius: 999px;
+    font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  }
+  .plano-icone { width: 30px; height: 30px; fill: none; stroke: var(--verde); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .plano h3 { margin-top: 18px; font-size: 1.25rem; font-weight: 800; line-height: 1.25; letter-spacing: -.01em; }
+  .plano > p { margin-top: 10px; color: var(--suave); }
+  .plano-itens { margin: 18px 0 24px; display: grid; gap: 8px; }
+  .plano-itens li { position: relative; padding-left: 16px; font-size: .95rem; }
+  .plano-itens li::before { content: ""; position: absolute; left: 0; top: .6em; width: 6px; height: 6px; border-radius: 50%; background: var(--terracota); }
+  .plano-botao {
+    margin-top: auto; display: flex; align-items: center; justify-content: center; min-height: 48px;
+    border: 1px solid var(--linha); border-radius: 999px; color: var(--tinta); font-weight: 700; text-decoration: none;
+    transition: background-color .2s ease, border-color .2s ease;
+  }
+  .plano-botao:hover { background: var(--gelo); border-color: var(--suave); }
+  .plano--destaque { background: var(--verde-escuro); border-color: var(--verde-escuro); color: var(--branco); box-shadow: var(--sombra-forte); }
+  .plano--destaque .plano-icone { stroke: var(--terracota-claro); }
+  .plano--destaque > p { color: rgba(255, 255, 255, .82); }
+  .plano--destaque .plano-itens li::before { background: var(--terracota-claro); }
+  .plano--destaque .plano-botao { background: var(--branco); border-color: var(--branco); }
+  .plano--destaque .plano-botao:hover { background: var(--gelo); }
+  .plano--destaque :focus-visible { outline-color: var(--terracota-claro); }
+  @media (max-width: 1040px) { .planos { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; } }
+  @media (max-width: 620px) { .planos { grid-template-columns: minmax(0, 1fr); } }
   #atalhosNichos { margin-bottom: clamp(28px, 4vw, 40px); }
 
   /* Blocos de vídeo por nicho */
@@ -301,7 +348,7 @@
   .video-capa {
     position: absolute; inset: 0; z-index: 2; pointer-events: none;
     display: flex; flex-direction: column; justify-content: flex-end; padding: 14px;
-    background: linear-gradient(180deg, rgba(20, 24, 16, .35) 0%, rgba(20, 24, 16, 0) 22%, rgba(20, 24, 16, 0) 58%, rgba(20, 24, 16, .78) 100%);
+    background: linear-gradient(180deg, rgba(20, 24, 16, .3) 0%, rgba(20, 24, 16, 0) 20%);
     color: var(--branco);
   }
   .video-selo {
@@ -313,7 +360,7 @@
   .video-titulo { font-size: clamp(1.05rem, 1.8vw, 1.35rem); font-weight: 800; line-height: 1.15; letter-spacing: -.01em; }
   .video-nicho { margin-top: 3px; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
   .video-play { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
-  .video-play .play { width: 56px; height: 56px; margin: -28px 0 0 -28px; background: var(--verde); transition: transform .25s ease, opacity .25s ease; }
+  .video-play .play { width: 56px; height: 56px; margin: -28px 0 0 -28px; background: var(--terracota); transition: transform .25s ease, opacity .25s ease; }
   .video-play .play svg { width: 22px; height: 22px; fill: var(--branco); }
   .video-play:hover .play { transform: scale(1.1); }
   .video-frame.ativo .play { opacity: 0; }
@@ -500,7 +547,7 @@
 </head>
 
 <body>
-<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<a class="pular" href="#conteudo" data-en="Skip to content">Pular para o conteúdo</a>
 
 <!-- Desenhos reaproveitados no site -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -511,21 +558,26 @@
 
 <!-- Faixa verde do topo -->
 <p class="faixa-entrega">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6h12v11H2zM14 10h4l4 4v3h-8z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>Entrega em até 72h úteis
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6h12v11H2zM14 10h4l4 4v3h-8z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg><span data-en="Delivery within 72 business hours">Entrega em até 72h úteis</span>
 </p>
 
 <!-- Menu fixo -->
 <header class="topo">
   <div class="caixa topo-linha">
-    <nav aria-label="Menu principal">
+    <nav aria-label="Menu principal" data-en-aria="Main menu">
       <button class="menu-botao" id="menuBotao" type="button" aria-expanded="false" aria-controls="menuLista" aria-label="Abrir menu"><span></span></button>
       <ul class="menu-lista" id="menuLista">
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#trabalhos">Trabalhos</a></li>
-        <li><a href="#servicos">Serviços</a></li>
-        <li><a href="#contato">Contato</a></li>
+        <li><a href="#sobre" data-en="About">Sobre</a></li>
+        <li><a href="#trabalhos" data-en="Work">Trabalhos</a></li>
+        <li><a href="#servicos" data-en="Services">Serviços</a></li>
+        <li><a href="#contato" data-en="Contact">Contato</a></li>
       </ul>
     </nav>
+    <!-- Botão de idioma: PT / EN -->
+    <div class="idioma" role="group" aria-label="Idioma / Language">
+      <button type="button" data-idioma="pt" aria-pressed="true" lang="pt-BR" aria-label="Português">PT</button>
+      <button type="button" data-idioma="en" aria-pressed="false" lang="en" aria-label="English">EN</button>
+    </div>
   </div>
 </header>
 
@@ -538,10 +590,10 @@
         <div class="capa-texto">
           <span class="selo-secao">UGC Creator 35+</span>
           <h1 class="capa-nome" id="capaNome">Ana Paula <span class="destaque">Mendes</span></h1>
-          <p class="capa-frase">Crio vídeos curtos com cara de recomendação sincera, para a sua marca ser lembrada e escolhida.</p>
+          <p class="capa-frase" data-en="I create short videos that feel like an honest recommendation, so your brand is remembered and chosen.">Crio vídeos curtos com cara de recomendação sincera, para a sua marca ser lembrada e escolhida.</p>
           <div class="capa-botoes">
-            <a class="botao botao--verde" href="#contato">Falar comigo</a>
-            <a class="botao botao--contorno" href="#trabalhos">Ver os trabalhos</a>
+            <a class="botao botao--verde" href="#contato" data-en="Let's talk">Falar comigo</a>
+            <a class="botao botao--contorno" href="#trabalhos" data-en="See my work">Ver os trabalhos</a>
           </div>
         </div>
 
@@ -558,7 +610,7 @@
       </div>
 
       <div class="faixa-marcas" role="group" aria-labelledby="faixaTitulo">
-        <p class="faixa-titulo" id="faixaTitulo">Marcas que confiam no meu trabalho</p>
+        <p class="faixa-titulo" id="faixaTitulo" data-en="Brands that trust my work">Marcas que confiam no meu trabalho</p>
         <div class="faixa-janela"><div class="faixa-trilho" id="faixaMarcas"></div></div>
       </div>
     </div>
@@ -575,89 +627,74 @@
         </div>
       </div>
       <div class="sobre-texto" data-revelar>
-        <h2 class="titulo-secao" id="tituloSobre">Sobre <span class="destaque">mim</span></h2>
-        <p>Oie, me chamo Ana Paula, tenho 38 anos, sou UGC Creator e UGC Manager e moro em Joinville/SC. Sou mãe e vivo a menopausa precoce induzida há 3 anos.</p>
-        <p>Crio conteúdo que une conexão real e estratégia para gerar confiança e vender. Com senso estético apurado, transformo produto em desejo de consumo.</p>
-        <p>Meu conteúdo conversa com a mulher 35+, que compra com consciência e quer se ver de verdade nos anúncios.</p>
+        <h2 class="titulo-secao" id="tituloSobre"><span data-en="About">Sobre</span> <span class="destaque" data-en="me">mim</span></h2>
+        <p data-en="Hi, I'm Ana Paula. I'm 38, a UGC Creator and UGC Manager based in Joinville, Brazil. I'm a mom and I've been living with induced early menopause for 3 years.">Oie, me chamo Ana Paula, tenho 38 anos, sou UGC Creator e UGC Manager e moro em Joinville/SC. Sou mãe e vivo a menopausa precoce induzida há 3 anos.</p>
+        <p data-en="I create content that blends real connection and strategy to build trust and sell. With a sharp eye for aesthetics, I turn products into objects of desire.">Crio conteúdo que une conexão real e estratégia para gerar confiança e vender. Com senso estético apurado, transformo produto em desejo de consumo.</p>
+        <p data-en="My content speaks to women 35+ who shop consciously and want to truly see themselves in ads.">Meu conteúdo conversa com a mulher 35+, que compra com consciência e quer se ver de verdade nos anúncios.</p>
       </div>
     </div>
   </section>
 
-  <!-- 3. CONTEÚDOS DE DESTAQUE
-       Os cards são montados a partir do array DESTAQUES, no começo do script.
-       O LINK DO VÍDEO entra no campo "link" e a CAPA entra no campo "capa". -->
-  <section class="secao secao--gelo" id="destaques" aria-labelledby="tituloDestaques">
-    <div class="caixa">
-      <div class="cabeca-secao" data-revelar>
-        <span class="selo-secao">Vitrine principal</span>
-        <h2 class="titulo-secao" id="tituloDestaques">Conteúdos de <span class="destaque">destaque</span></h2>
-        <p>Três vídeos para você ver como eu apresento um produto. Toque em um deles para assistir.</p>
-      </div>
-      <ul class="destaques-grade" id="listaDestaques"></ul>
-    </div>
-  </section>
-
-  <!-- 4. TRABALHOS POR NICHO (vídeos no array NICHOS, no começo do script) -->
+  <!-- 3. TRABALHOS POR NICHO (vídeos no array NICHOS, no começo do script) -->
   <section class="secao" id="trabalhos" aria-labelledby="tituloTrabalhos">
     <div class="caixa">
       <div class="cabeca-secao" data-revelar>
-        <span class="selo-secao">Catálogo</span>
-        <h2 class="titulo-secao" id="tituloTrabalhos">Trabalhos por <span class="destaque">nicho</span></h2>
-        <p>Escolha o nicho da sua marca e toque em um vídeo para assistir aqui mesmo.</p>
+        <span class="selo-secao" data-en="Catalog">Catálogo</span>
+        <h2 class="titulo-secao" id="tituloTrabalhos"><span data-en="Work by">Trabalhos por</span> <span class="destaque" data-en="niche">nicho</span></h2>
+        <p data-en="Choose your brand's niche and tap a video to watch it right here.">Escolha o nicho da sua marca e toque em um vídeo para assistir aqui mesmo.</p>
       </div>
-      <nav class="filtros" id="atalhosNichos" aria-label="Ir para um nicho"></nav>
+      <nav class="filtros" id="atalhosNichos" aria-label="Ir para um nicho" data-en-aria="Go to a niche"></nav>
       <div id="blocosNichos"></div>
     </div>
   </section>
 
-  <!-- 5. COMO EU TE AJUDO (dados no array SERVICOS) -->
+  <!-- 4. SERVIÇOS: O QUE PODEMOS CRIAR JUNTOS? (dados no array SERVICOS) -->
   <section class="secao secao--gelo" id="servicos" aria-labelledby="tituloServicos">
     <div class="caixa">
-      <div class="cabeca-secao" data-revelar>
-        <span class="selo-secao">O que tem na loja</span>
-        <h2 class="titulo-secao" id="tituloServicos">Como eu te <span class="destaque">ajudo</span></h2>
-        <p>Peça um item só ou monte o pacote que faz sentido para o momento da sua marca.</p>
+      <div class="cabeca-centro" data-revelar>
+        <p class="eyebrow-linhas" data-en="Services">Serviços</p>
+        <h2 class="titulo-secao" id="tituloServicos"><span data-en="What can we">O que podemos</span> <span class="destaque" data-en="create">criar</span> <span data-en="together?">juntos?</span></h2>
       </div>
-      <ol class="servicos" id="listaServicos"></ol>
+      <ul class="planos" id="listaServicos"></ul>
     </div>
   </section>
 
-  <!-- 6. NÚMEROS E DEPOIMENTOS (dados nos arrays METRICAS, RESULTADOS e DEPOIMENTOS) -->
+  <!-- 5. NÚMEROS E DEPOIMENTOS (dados nos arrays METRICAS, RESULTADOS e DEPOIMENTOS) -->
   <section class="secao" id="numeros" aria-labelledby="tituloNumeros">
     <div class="caixa">
       <div class="cabeca-secao" data-revelar>
-        <span class="selo-secao">Avaliações da loja</span>
-        <h2 class="titulo-secao" id="tituloNumeros">Números e <span class="destaque">depoimentos</span></h2>
+        <span class="selo-secao" data-en="Reviews">Avaliações da loja</span>
+        <h2 class="titulo-secao" id="tituloNumeros"><span data-en="Numbers and">Números e</span> <span class="destaque" data-en="testimonials">depoimentos</span></h2>
       </div>
       <ul class="metricas" id="listaMetricas"></ul>
-      <h3 class="subtitulo" data-revelar>Resultados de campanha</h3>
+      <h3 class="subtitulo" data-revelar data-en="Campaign results">Resultados de campanha</h3>
       <ul class="resultados" id="listaResultados"></ul>
-      <h3 class="subtitulo" data-revelar>Quem já contratou</h3>
+      <h3 class="subtitulo" data-revelar data-en="Who has hired me">Quem já contratou</h3>
       <div class="depoimentos" id="listaDepoimentos"></div>
     </div>
   </section>
 
-  <!-- 7. BORA CRIAR JUNTOS -->
+  <!-- 6. BORA CRIAR JUNTOS -->
   <section class="secao secao--gelo" id="contato" aria-labelledby="tituloContato">
     <div class="caixa">
       <div class="cabeca-secao" data-revelar>
-        <span class="selo-secao">Finalizar pedido</span>
-        <h2 class="titulo-secao" id="tituloContato">Bora criar <span class="destaque">juntos</span></h2>
-        <p>Me conte sobre a sua marca e o produto. O orçamento é sob consulta e sem compromisso.</p>
+        <span class="selo-secao" data-en="Checkout">Finalizar pedido</span>
+        <h2 class="titulo-secao" id="tituloContato"><span data-en="Let's create">Bora criar</span> <span class="destaque" data-en="together">juntos</span></h2>
+        <p data-en="Tell me about your brand and product. Quotes are free and with no commitment.">Me conte sobre a sua marca e o produto. O orçamento é sob consulta e sem compromisso.</p>
       </div>
       <div class="contato-grade">
         <div class="contato-form" data-revelar>
           <form id="formContato">
-            <label class="campo"><span>Nome</span><input type="text" name="nome" autocomplete="name" required></label>
-            <label class="campo"><span>E-mail</span><input type="email" name="email" autocomplete="email" required></label>
-            <label class="campo"><span>Mensagem</span><textarea name="mensagem" rows="5" required></textarea></label>
-            <button class="botao botao--verde form-botao" type="submit">Enviar mensagem</button>
+            <label class="campo"><span data-en="Name">Nome</span><input type="text" name="nome" autocomplete="name" required></label>
+            <label class="campo"><span data-en="Email">E-mail</span><input type="email" name="email" autocomplete="email" required></label>
+            <label class="campo"><span data-en="Message">Mensagem</span><textarea name="mensagem" rows="5" required></textarea></label>
+            <button class="botao botao--verde form-botao" type="submit" data-en="Send message">Enviar mensagem</button>
           </form>
           <div class="confirmacao" id="confirmacaoContato" tabindex="-1" role="status" hidden></div>
         </div>
         <aside class="contato-canais fundo-verde" data-revelar aria-labelledby="tituloCanais">
-          <h3 id="tituloCanais">Prefere falar direto?</h3>
-          <p>Escolha o canal que for melhor para você.</p>
+          <h3 id="tituloCanais" data-en="Prefer to talk directly?">Prefere falar direto?</h3>
+          <p data-en="Choose the channel that works best for you.">Escolha o canal que for melhor para você.</p>
           <div class="canais">
             <a class="canal" href="https://wa.me/5542998453959" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 21l2.1-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg>
@@ -672,7 +709,7 @@
               <span><b>Instagram</b><small>@anapaulaugcmanager</small></span>
             </a>
           </div>
-          <p class="contato-cidade">Direto de Joinville para a sua marca.</p>
+          <p class="contato-cidade" data-en="Straight from Joinville to your brand.">Direto de Joinville para a sua marca.</p>
         </aside>
       </div>
     </div>
@@ -695,15 +732,15 @@
 <!-- CARD DE CAPTURA: aparece sozinho depois de 7 segundos, uma vez por visita -->
 <dialog class="captura" id="captura" aria-labelledby="capturaTitulo">
   <div class="captura-corpo" id="capturaCorpo" tabindex="-1" autofocus>
-    <button class="captura-fechar" id="capturaFechar" type="button" aria-label="Fechar">
+    <button class="captura-fechar" id="capturaFechar" type="button" aria-label="Fechar" data-en-aria="Close">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
     </button>
     <div id="capturaConteudo">
-      <h2 id="capturaTitulo">Quer meu mídia kit completo?</h2>
+      <h2 id="capturaTitulo" data-en="Want my full media kit?">Quer meu mídia kit completo?</h2>
       <form id="formCaptura">
-        <label class="campo"><span>Nome</span><input type="text" name="nome" autocomplete="name" required></label>
-        <label class="campo"><span>E-mail</span><input type="email" name="email" autocomplete="email" required></label>
-        <button class="botao botao--verde form-botao" type="submit">Quero receber</button>
+        <label class="campo"><span data-en="Name">Nome</span><input type="text" name="nome" autocomplete="name" required></label>
+        <label class="campo"><span data-en="Email">E-mail</span><input type="email" name="email" autocomplete="email" required></label>
+        <button class="botao botao--verde form-botao" type="submit" data-en="Send it to me">Quero receber</button>
       </form>
     </div>
     <div class="confirmacao" id="confirmacaoCaptura" tabindex="-1" role="status" hidden></div>
@@ -755,54 +792,19 @@ const MARCAS = [
   { nome: "Pano Curto",     logo: "logo-panocurto.webp" }
 ];
 
-/* DESTAQUES: os três vídeos grandes.
-   link   = AQUI ENTRA O LINK DO VÍDEO. O card inteiro abre esse endereço.
-   capa   = AQUI ENTRA A CAPA. Coloque o arquivo na mesma pasta e escreva o nome, exemplo: "capa-1.jpg".
-            Vazio mostra o bloco em degradê. Use imagem vertical 9:16 com até 150 KB.
-   alt    = descrição da capa para leitores de tela.
-   numero e rotulo = o número forte do card. O rótulo diz o que ele mede. */
-const DESTAQUES = [
-  {
-    link: "https://youtube.com/shorts/-Ied1Ga21Uc",
-    capa: "",
-    alt: "Capa do vídeo para Theoric",
-    numero: "", // opcional: um número forte, exemplo "+2,4M". Vazio não aparece.
-    rotulo: "", // opcional: o que o número mede
-    titulo: "Vídeo UGC para Theoric",
-    contexto: "Vídeo curto vertical publicado no YouTube Shorts."
-  },
-  {
-    link: "https://youtube.com/shorts/1I0HnNexCXM",
-    capa: "",
-    alt: "Capa do primeiro vídeo para Rosa Selvagem",
-    numero: "", // opcional: um número forte, exemplo "+2,4M". Vazio não aparece.
-    rotulo: "", // opcional: o que o número mede
-    titulo: "Vídeo UGC para Rosa Selvagem",
-    contexto: "Vídeo curto vertical publicado no YouTube Shorts."
-  },
-  {
-    link: "https://youtube.com/shorts/frkO46za0k0",
-    capa: "",
-    alt: "Capa do segundo vídeo para Rosa Selvagem",
-    numero: "", // opcional: um número forte, exemplo "+2,4M". Vazio não aparece.
-    rotulo: "", // opcional: o que o número mede
-    titulo: "Rosa Selvagem, segundo vídeo",
-    contexto: "Vídeo curto vertical publicado no YouTube Shorts."
-  }
-];
-
 /* NICHOS: cada nicho vira um bloco com os vídeos lado a lado, nesta ordem.
+   nome / en = nome do nicho em português e em inglês.
    yt    = o código do vídeo no YouTube (o que vem depois de /shorts/ no link).
-   marca = nome que aparece embaixo do vídeo. Pode ficar vazio.
+   marca = nome que aparece na etiqueta em cima do vídeo. Pode ficar vazio.
    Para acrescentar um vídeo, copie uma linha e troque o código. */
 const NICHOS = [
-  { nome: "Fragrance", videos: [
-    { yt: "6MQVFUYebSA", marca: "" },
+  { nome: "Fragrance", en: "Fragrance", videos: [
+    { yt: "6MQVFUYebSA", marca: "Sou Vegan" },
     { yt: "QoeimOoLbio", marca: "Rosa Selvagem" },
     { yt: "uHclbabudyw", marca: "Perfumoá" },
     { yt: "OWtvhM8_kWg", marca: "Rosa Selvagem" }
   ]},
-  { nome: "Skincare", videos: [
+  { nome: "Skincare", en: "Skincare", videos: [
     { yt: "-Ied1Ga21Uc", marca: "Theoric" },
     { yt: "1I0HnNexCXM", marca: "Rosa Selvagem" },
     { yt: "frkO46za0k0", marca: "Rosa Selvagem" },
@@ -810,13 +812,13 @@ const NICHOS = [
     { yt: "N-ehOZtRPvA", marca: "Beyoung" },
     { yt: "ehva6f1JyOY", marca: "Beyoung" }
   ]},
-  { nome: "Haircare", videos: [
+  { nome: "Haircare", en: "Haircare", videos: [
     { yt: "KWq-VLzWyWY", marca: "Color Wow" },
     { yt: "cEttY8E7l8M", marca: "Color Wow" },
     { yt: "QK1CwChhF7g", marca: "Mais Blond" },
     { yt: "bpp8WohNMl8", marca: "Knut" }
   ]},
-  { nome: "Saúde e bem-estar", videos: [
+  { nome: "Saúde e bem-estar", en: "Health & wellness", videos: [
     { yt: "fs9I7Mx6Wxs", marca: "Tetra Pak" },
     { yt: "nH8RhjHMST8", marca: "Belbs" },
     { yt: "6vBN5ywN5pk", marca: "Trimod" },
@@ -825,26 +827,26 @@ const NICHOS = [
     { yt: "RWI10IBez-A", marca: "NutriMel" },
     { yt: "bPClV2mE_oA", marca: "Dry Skin" }
   ]},
-  { nome: "Fitness", videos: [
+  { nome: "Fitness", en: "Fitness", videos: [
     { yt: "Os-2AV6PbdE", marca: "Radiance" },
     { yt: "sqIIm1Nrw1I", marca: "Radiance" },
     { yt: "Ul68krUWIME", marca: "Pano Curto" },
     { yt: "zpFogokp_pw", marca: "Pano Curto" }
   ]},
-  { nome: "Tech e app", videos: [
+  { nome: "Tech e app", en: "Tech & apps", videos: [
     { yt: "NE6bZiqZ2Xs", marca: "HostGator" },
     { yt: "UeHXeWuaUy8", marca: "HostGator" },
     { yt: "Nxs7HNSP33k", marca: "Crehub" },
     { yt: "NZAQw-RYHjU", marca: "O Boticário" },
     { yt: "mBPcsj3t_28", marca: "Ailos" }
   ]},
-  { nome: "Serviços", videos: [
+  { nome: "Serviços", en: "Services", videos: [
     { yt: "lhQzqgYu3tU", marca: "Fisioclin" },
     { yt: "9vEvZ_zpQ_w", marca: "Parque" },
     { yt: "-th_8b0QBmg", marca: "Salão" },
     { yt: "6B9SGEBiMmY", marca: "Salão" }
   ]},
-  { nome: "Faceless", videos: [
+  { nome: "Faceless", en: "Faceless", videos: [
     { yt: "uIC84Gbtr_0", marca: "" },
     { yt: "rmWTARlwgn8", marca: "" },
     { yt: "GOKn3UcO9hk", marca: "" },
@@ -852,14 +854,31 @@ const NICHOS = [
   ]}
 ];
 
-/* SERVICOS: os seis itens de "Como eu te ajudo". O número é colocado sozinho. */
+/* SERVICOS: os cards de "O que podemos criar juntos?".
+   Cada texto tem a versão em português e a versão em inglês (_en).
+   destaque: true deixa o card escuro com a etiqueta "Mais pedido".
+   icone = alvo, sacola, megafone ou pessoas. */
 const SERVICOS = [
-  { titulo: "Vídeo UGC", descricao: "Vídeo vertical gravado por mim, com roteiro aprovado por você e jeito de recomendação real." },
-  { titulo: "Corte para anúncio", descricao: "Versões com ganchos e durações diferentes, prontas para testar em tráfego pago." },
-  { titulo: "Fotos do produto", descricao: "Fotos naturais do produto em uso, para a loja, as redes sociais e os anúncios." },
-  { titulo: "Unboxing", descricao: "A primeira impressão em vídeo, da caixa fechada até o primeiro uso do produto." },
-  { titulo: "Publicação no meu perfil", descricao: "Publico o conteúdo no meu Instagram e marco a sua marca, para somar alcance." },
-  { titulo: "Pacote mensal", descricao: "Um volume combinado de conteúdos todo mês, para a sua marca nunca sumir do feed." }
+  { destaque: true, icone: "alvo",
+    titulo: "Criativos para anúncio", titulo_en: "Ad creatives",
+    descricao: "Vídeos com ganchos fortes, pensados para tráfego pago e para baixar o custo por venda.",
+    descricao_en: "Hook-driven videos made for paid traffic and a lower cost per sale.",
+    itens: ["Meta Ads", "TikTok Ads", "YouTube Ads"], itens_en: ["Meta Ads", "TikTok Ads", "YouTube Ads"] },
+  { icone: "sacola",
+    titulo: "UGC para e-commerce", titulo_en: "UGC for e-commerce",
+    descricao: "Seu produto em uso, com cara de cliente real, para a sua loja vender todos os dias.",
+    descricao_en: "Your product in real use, with a real-customer feel, so your store sells every day.",
+    itens: ["Review", "Unboxing", "Antes e depois"], itens_en: ["Review", "Unboxing", "Before and after"] },
+  { icone: "megafone",
+    titulo: "Publi no meu perfil", titulo_en: "Sponsored post on my profile",
+    descricao: "Sua marca no meu Instagram, falando com mulheres 35+ que já confiam em mim.",
+    descricao_en: "Your brand on my Instagram, speaking to women 35+ who already trust me.",
+    itens: ["Reels", "Stories", "Carrossel"], itens_en: ["Reels", "Stories", "Carousel"] },
+  { icone: "pessoas",
+    titulo: "Gestão de UGC", titulo_en: "UGC management",
+    descricao: "Eu coordeno outras creators para a sua marca, do briefing à entrega, sem dor de cabeça.",
+    descricao_en: "I manage other creators for your brand, from briefing to delivery, hassle free.",
+    itens: ["Curadoria", "Briefing", "Entrega"], itens_en: ["Curation", "Briefing", "Delivery"] }
 ];
 
 /* METRICAS: as duas primeiras também aparecem na capa.
@@ -867,24 +886,24 @@ const SERVICOS = [
    decimais = casas depois da vírgula. Para 2,4M use valor: 2.4, decimais: 1, sufixo: "M".
    zeros    = só para o número provisório aparecer como 00. */
 const METRICAS = [
-  { valor: 50, prefixo: "+", sufixo: "",  rotulo: "vídeos entregues" },
-  { valor: 30, prefixo: "+", sufixo: "",  rotulo: "marcas atendidas" },
-  { valor: 5,  prefixo: "",  sufixo: "",  rotulo: "nichos atendidos" }
+  { valor: 50, prefixo: "+", sufixo: "",  rotulo: "vídeos entregues", rotulo_en: "videos delivered" },
+  { valor: 30, prefixo: "+", sufixo: "",  rotulo: "marcas atendidas", rotulo_en: "brands served" },
+  { valor: 5,  prefixo: "",  sufixo: "",  rotulo: "nichos atendidos", rotulo_en: "niches served" }
 ];
 
 /* RESULTADOS: três resultados de campanha. TROCAR todos pelos dados reais. */
 const RESULTADOS = [
-  { numero: "+00%", campanha: "Campanha 01", resumo: "Troque pelo nome da marca e pelo que esta campanha entregou." },
-  { numero: "+00%", campanha: "Campanha 02", resumo: "Troque pelo nome da marca e pelo que esta campanha entregou." },
-  { numero: "+00%", campanha: "Campanha 03", resumo: "Troque pelo nome da marca e pelo que esta campanha entregou." }
+  { numero: "+00%", campanha: "Campanha 01", campanha_en: "Campaign 01", resumo: "Troque pelo nome da marca e pelo que esta campanha entregou.", resumo_en: "Replace with the brand name and what this campaign delivered." },
+  { numero: "+00%", campanha: "Campanha 02", campanha_en: "Campaign 02", resumo: "Troque pelo nome da marca e pelo que esta campanha entregou.", resumo_en: "Replace with the brand name and what this campaign delivered." },
+  { numero: "+00%", campanha: "Campanha 03", campanha_en: "Campaign 03", resumo: "Troque pelo nome da marca e pelo que esta campanha entregou.", resumo_en: "Replace with the brand name and what this campaign delivered." }
 ];
 
 /* DEPOIMENTOS: quatro depoimentos. TROCAR todos pelos textos reais. */
 const DEPOIMENTOS = [
-  { texto: "Cole aqui o depoimento real deste cliente, com as palavras dele sobre como foi trabalhar com você.", nome: "Cliente 01", empresa: "Empresa 01" },
-  { texto: "Cole aqui o depoimento real deste cliente, com as palavras dele sobre como foi trabalhar com você.", nome: "Cliente 02", empresa: "Empresa 02" },
-  { texto: "Cole aqui o depoimento real deste cliente, com as palavras dele sobre como foi trabalhar com você.", nome: "Cliente 03", empresa: "Empresa 03" },
-  { texto: "Cole aqui o depoimento real deste cliente, com as palavras dele sobre como foi trabalhar com você.", nome: "Cliente 04", empresa: "Empresa 04" }
+  { texto: "Cole aqui o depoimento real deste cliente, com as palavras dele sobre como foi trabalhar com você.", texto_en: "Paste this client's real testimonial here, in their own words about working with you.", nome: "Cliente 01", empresa: "Empresa 01" },
+  { texto: "Cole aqui o depoimento real deste cliente, com as palavras dele sobre como foi trabalhar com você.", texto_en: "Paste this client's real testimonial here, in their own words about working with you.", nome: "Cliente 02", empresa: "Empresa 02" },
+  { texto: "Cole aqui o depoimento real deste cliente, com as palavras dele sobre como foi trabalhar com você.", texto_en: "Paste this client's real testimonial here, in their own words about working with you.", nome: "Cliente 03", empresa: "Empresa 03" },
+  { texto: "Cole aqui o depoimento real deste cliente, com as palavras dele sobre como foi trabalhar com você.", texto_en: "Paste this client's real testimonial here, in their own words about working with you.", nome: "Cliente 04", empresa: "Empresa 04" }
 ];
 
 /* =====================================================================
@@ -903,6 +922,13 @@ const DEPOIMENTOS = [
     return d.innerHTML.replace(/"/g, "&quot;");
   }
   function pad(n) { return String(n).padStart(2, "0"); }
+
+  /* Idioma: português (padrão) ou inglês, guardado no navegador da pessoa */
+  let idioma = "pt";
+  try { if (localStorage.getItem("idioma") === "en") idioma = "en"; } catch (erro) { /* sem armazenamento */ }
+  const t = (pt, en) => (idioma === "en" ? en : pt);
+  const attrEn = (texto) => ' data-en="' + esc(texto) + '"';
+  const attrEnAria = (texto) => ' data-en-aria="' + esc(texto) + '"';
 
   /* Monta a capa de um item: imagem real se houver, senão o bloco em degradê */
   function midia(capa, alt, formato, legenda, gradiente, preguicosa) {
@@ -926,7 +952,7 @@ const DEPOIMENTOS = [
 
   /* Capa: três números */
   $("capaNumeros").innerHTML = METRICAS.slice(0, 2).map((m, i) =>
-    '<li class="numero-mini">' + htmlContador(m, i) + '<span class="rotulo">' + esc(m.rotulo) + "</span></li>"
+    '<li class="numero-mini">' + htmlContador(m, i) + '<span class="rotulo"' + attrEn(m.rotulo_en || m.rotulo) + ">" + esc(m.rotulo) + "</span></li>"
   ).join("");
 
   /* Capa: faixa de marcas. As cópias extras fazem a faixa rodar sem emenda. */
@@ -935,54 +961,38 @@ const DEPOIMENTOS = [
   $("faixaMarcas").innerHTML = "<ul>" + MARCAS.map((m) => logoMarca(m, true)).join("") + "</ul>" +
     ('<ul aria-hidden="true">' + MARCAS.map((m) => logoMarca(m, false)).join("") + "</ul>").repeat(2);
 
-  /* Destaques: AQUI o "link" vira o endereço do card e a "capa" vira a imagem */
-  $("listaDestaques").innerHTML = DESTAQUES.map((d, i) =>
-    '<li data-revelar><a class="destaque-card" href="' + esc(d.link) + '" target="_blank" rel="noopener">' +
-      '<div style="position:relative">' +
-        midia(d.capa, d.alt, "9x16", "capa do vídeo 9:16", ["grad-1", "grad-5", "grad-3"][i % 3], true) +
-        '<span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>' +
-      "</div>" +
-      '<div class="destaque-info">' +
-        (d.numero ? '<strong class="destaque-numero">' + esc(d.numero) + "</strong>" : "") +
-        (d.rotulo ? '<span class="destaque-rotulo">' + esc(d.rotulo) + "</span>" : "") +
-        "<h3>" + esc(d.titulo) + "</h3>" +
-        "<p>" + esc(d.contexto) + "</p>" +
-        '<span class="so-leitor"> (abre o vídeo em nova aba)</span>' +
-      "</div>" +
-    "</a></li>"
-  ).join("");
-
   /* Trabalhos: um bloco por nicho, com os vídeos lado a lado */
   const slug = (t) => "nicho-" + t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const nichosComVideo = NICHOS.filter((n) => n.videos && n.videos.length);
 
   $("atalhosNichos").innerHTML = nichosComVideo.map((n) =>
-    '<a class="filtro" href="#' + slug(n.nome) + '">' + esc(n.nome) + "</a>"
+    '<a class="filtro" href="#' + slug(n.nome) + '"' + attrEn(n.en || n.nome) + ">" + esc(n.nome) + "</a>"
   ).join("");
 
   $("blocosNichos").innerHTML = nichosComVideo.map((n) => {
     const id = slug(n.nome);
+    const nomeEn = n.en || n.nome;
     const qtd = n.videos.length + (n.videos.length === 1 ? " vídeo" : " vídeos");
+    const qtdEn = n.videos.length + (n.videos.length === 1 ? " video" : " videos");
     return '<section class="nicho" id="' + id + '" aria-labelledby="' + id + '-titulo">' +
       '<div class="nicho-topo">' +
-        '<h3 id="' + id + '-titulo">' + esc(n.nome) + ' <span class="nicho-qtd">' + qtd + "</span></h3>" +
+        '<h3 id="' + id + '-titulo"><span' + attrEn(nomeEn) + ">" + esc(n.nome) + '</span> <span class="nicho-qtd"' + attrEn(qtdEn) + ">" + qtd + "</span></h3>" +
         '<div class="nicho-setas">' +
-          '<button type="button" class="seta" data-seta="-1" aria-label="Vídeos anteriores de ' + esc(n.nome) + '"><span aria-hidden="true">‹</span></button>' +
-          '<button type="button" class="seta" data-seta="1" aria-label="Próximos vídeos de ' + esc(n.nome) + '"><span aria-hidden="true">›</span></button>' +
+          '<button type="button" class="seta" data-seta="-1" aria-label="Vídeos anteriores de ' + esc(n.nome) + '"' + attrEnAria("Previous " + nomeEn + " videos") + '><span aria-hidden="true">‹</span></button>' +
+          '<button type="button" class="seta" data-seta="1" aria-label="Próximos vídeos de ' + esc(n.nome) + '"' + attrEnAria("Next " + nomeEn + " videos") + '><span aria-hidden="true">›</span></button>' +
         "</div>" +
       "</div>" +
       '<ul class="videos-linha">' + n.videos.map((v) => {
         const rotulo = "Assistir vídeo" + (v.marca ? " para " + v.marca : "") + ", " + n.nome;
+        const rotuloEn = "Watch video" + (v.marca ? " for " + v.marca : "") + ", " + nomeEn;
         return '<li class="video-card">' +
           '<div class="video-frame" data-yt="' + esc(v.yt) + '">' +
             '<img class="video-thumb" src="https://i.ytimg.com/vi/' + esc(v.yt) + '/oar2.jpg" alt="" loading="lazy" decoding="async" width="1080" height="1920"' +
               ' onerror="this.onerror=null;this.src=\'https://i.ytimg.com/vi/' + esc(v.yt) + '/hqdefault.jpg\'">' +
             '<div class="video-capa" aria-hidden="true">' +
               (v.marca ? '<span class="video-selo">' + esc(v.marca) + "</span>" : "") +
-              '<span class="video-titulo">' + esc(v.marca || n.nome) + "</span>" +
-              '<span class="video-nicho">' + esc(n.nome) + "</span>" +
             "</div>" +
-            '<button type="button" class="video-play" aria-label="' + esc(rotulo) + '">' +
+            '<button type="button" class="video-play" aria-label="' + esc(rotulo) + '"' + attrEnAria(rotuloEn) + ">" +
               '<span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>' +
             "</button>" +
           "</div>" +
@@ -1098,20 +1108,35 @@ const DEPOIMENTOS = [
     else { tocar(frame, true); botao.setAttribute("aria-pressed", "true"); }
   });
 
-  /* Serviços */
-  $("listaServicos").innerHTML = SERVICOS.map((s, i) =>
-    '<li class="servico" data-revelar><span class="servico-numero">' + pad(i + 1) + "</span><h3>" + esc(s.titulo) + "</h3><p>" + esc(s.descricao) + "</p></li>"
+  /* Serviços: cards como vitrine, o primeiro em destaque */
+  const ICONES = {
+    alvo: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+    sacola: '<path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+    megafone: '<path d="M3 10v4h4l7 4V6L7 10z"/><path d="M17 9a4 4 0 0 1 0 6"/><path d="M7 14l1 5h3l-1-4"/>',
+    pessoas: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/>'
+  };
+  $("listaServicos").innerHTML = SERVICOS.map((s) =>
+    '<li class="plano' + (s.destaque ? " plano--destaque" : "") + '" data-revelar>' +
+      (s.destaque ? '<span class="plano-selo"' + attrEn("Most requested") + ">Mais pedido</span>" : "") +
+      '<svg class="plano-icone" viewBox="0 0 24 24" aria-hidden="true">' + (ICONES[s.icone] || ICONES.alvo) + "</svg>" +
+      "<h3" + attrEn(s.titulo_en || s.titulo) + ">" + esc(s.titulo) + "</h3>" +
+      "<p" + attrEn(s.descricao_en || s.descricao) + ">" + esc(s.descricao) + "</p>" +
+      '<ul class="plano-itens">' + s.itens.map((item, i) =>
+        "<li" + attrEn((s.itens_en && s.itens_en[i]) || item) + ">" + esc(item) + "</li>"
+      ).join("") + "</ul>" +
+      '<a class="plano-botao" href="#contato" data-pedido="' + esc(s.titulo) + '" data-pedido-en="' + esc(s.titulo_en || s.titulo) + '"' + attrEn("I want this") + ">Quero esse</a>" +
+    "</li>"
   ).join("");
 
   /* Métricas, resultados e depoimentos */
   $("listaMetricas").innerHTML = METRICAS.map((m, i) =>
-    '<li class="metrica" data-revelar>' + htmlContador(m, i) + '<span class="rotulo">' + esc(m.rotulo) + "</span></li>"
+    '<li class="metrica" data-revelar>' + htmlContador(m, i) + '<span class="rotulo"' + attrEn(m.rotulo_en || m.rotulo) + ">" + esc(m.rotulo) + "</span></li>"
   ).join("");
   $("listaResultados").innerHTML = RESULTADOS.map((r) =>
-    '<li class="resultado fundo-verde" data-revelar><strong>' + esc(r.numero) + "</strong><h4>" + esc(r.campanha) + "</h4><p>" + esc(r.resumo) + "</p></li>"
+    '<li class="resultado fundo-verde" data-revelar><strong>' + esc(r.numero) + "</strong><h4" + attrEn(r.campanha_en || r.campanha) + ">" + esc(r.campanha) + "</h4><p" + attrEn(r.resumo_en || r.resumo) + ">" + esc(r.resumo) + "</p></li>"
   ).join("");
   $("listaDepoimentos").innerHTML = DEPOIMENTOS.map((d) =>
-    '<figure class="depoimento" data-revelar><blockquote>' + esc(d.texto) + '</blockquote><figcaption><span class="inicial" aria-hidden="true">' + esc(d.nome.charAt(0)) + "</span><span><b>" + esc(d.nome) + "</b><small>" + esc(d.empresa) + "</small></span></figcaption></figure>"
+    '<figure class="depoimento" data-revelar><blockquote' + attrEn(d.texto_en || d.texto) + ">" + esc(d.texto) + '</blockquote><figcaption><span class="inicial" aria-hidden="true">' + esc(d.nome.charAt(0)) + "</span><span><b>" + esc(d.nome) + "</b><small>" + esc(d.empresa) + "</small></span></figcaption></figure>"
   ).join("");
 
   /* Menu sanduíche */
@@ -1120,7 +1145,7 @@ const DEPOIMENTOS = [
   function menu(aberto) {
     menuLista.classList.toggle("aberto", aberto);
     menuBotao.setAttribute("aria-expanded", String(aberto));
-    menuBotao.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
+    menuBotao.setAttribute("aria-label", aberto ? t("Fechar menu", "Close menu") : t("Abrir menu", "Open menu"));
   }
   menuBotao.addEventListener("click", () => menu(!menuLista.classList.contains("aberto")));
   menuLista.addEventListener("click", (e) => { if (e.target.closest("a")) menu(false); });
@@ -1212,20 +1237,20 @@ const DEPOIMENTOS = [
     if (enviado) {
       confirmacaoContato.innerHTML =
         '<div class="confirmacao-icone">' + iconeCheck + "</div>" +
-        "<h3>Recebi sua mensagem, " + nome + "!</h3>" +
-        "<p>Vou ler com calma e responder no e-mail " + esc(dados.email) + ".</p>";
+        "<h3>" + t("Recebi sua mensagem, ", "Got your message, ") + nome + "!</h3>" +
+        "<p>" + t("Vou ler com calma e responder no e-mail ", "I'll read it carefully and reply to ") + esc(dados.email) + ".</p>";
     } else {
-      const texto = "Olá, " + CONTATO.nome + "! Meu nome é " + dados.nome + " (" + dados.email + ").\n\n" + dados.mensagem;
+      const texto = t("Olá, " + CONTATO.nome + "! Meu nome é ", "Hi, " + CONTATO.nome + "! My name is ") + dados.nome + " (" + dados.email + ").\n\n" + dados.mensagem;
       confirmacaoContato.innerHTML =
         '<div class="confirmacao-icone">' + iconeCheck + "</div>" +
-        "<h3>Sua mensagem está pronta, " + nome + "!</h3>" +
-        "<p>Falta só um toque: escolha por onde quer me enviar. O texto já vai escrito.</p>" +
+        "<h3>" + t("Sua mensagem está pronta, ", "Your message is ready, ") + nome + "!</h3>" +
+        "<p>" + t("Falta só um toque: escolha por onde quer me enviar. O texto já vai escrito.", "Just one more tap: choose how to send it. The text is already written.") + "</p>" +
         '<div class="confirmacao-botoes">' +
-          '<a class="botao botao--verde" href="' + esc(linkWhats(texto)) + '" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>' +
-          '<a class="botao botao--contorno" href="' + esc(linkEmail("Contato pelo portfólio", texto)) + '">Enviar por e-mail</a>' +
+          '<a class="botao botao--verde" href="' + esc(linkWhats(texto)) + '" target="_blank" rel="noopener">' + t("Enviar pelo WhatsApp", "Send via WhatsApp") + "</a>" +
+          '<a class="botao botao--contorno" href="' + esc(linkEmail(t("Contato pelo portfólio", "Portfolio contact"), texto)) + '">' + t("Enviar por e-mail", "Send by email") + "</a>" +
         "</div>";
     }
-    confirmacaoContato.insertAdjacentHTML("beforeend", '<button class="link-simples" type="button" id="novaMensagem">Escrever outra mensagem</button>');
+    confirmacaoContato.insertAdjacentHTML("beforeend", '<button class="link-simples" type="button" id="novaMensagem">' + t("Escrever outra mensagem", "Write another message") + "</button>");
     formContato.hidden = true;
     confirmacaoContato.hidden = false;
     confirmacaoContato.focus();
@@ -1235,6 +1260,21 @@ const DEPOIMENTOS = [
       mostrarFormContato();
       formContato.elements.nome.focus();
     });
+  });
+
+  /* Botão "Quero esse" dos serviços: já deixa o pedido escrito na mensagem */
+  $("listaServicos").addEventListener("click", (e) => {
+    const link = e.target.closest("[data-pedido]");
+    if (!link) return;
+    mostrarFormContato();
+    const campo = formContato.elements.mensagem;
+    if (!campo.value || campo.value === pedidoAutomatico) {
+      pedidoAutomatico = t(
+        "Olá, " + CONTATO.nome + "! Tenho interesse no serviço: " + link.dataset.pedido + ".",
+        "Hi, " + CONTATO.nome + "! I'm interested in: " + link.dataset.pedidoEn + "."
+      );
+      campo.value = pedidoAutomatico;
+    }
   });
 
   /* Card de captura */
@@ -1278,14 +1318,17 @@ const DEPOIMENTOS = [
     const caixa = $("confirmacaoCaptura");
     if (enviado) {
       caixa.innerHTML = '<div class="confirmacao-icone">' + iconeCheck + "</div>" +
-        "<h2>Pedido anotado, " + nome + "!</h2><p>Vou mandar o mídia kit para " + esc(dados.email) + ".</p>";
+        "<h2>" + t("Pedido anotado, ", "Request received, ") + nome + "!</h2><p>" + t("Vou mandar o mídia kit para ", "I'll send the media kit to ") + esc(dados.email) + ".</p>";
     } else {
-      const texto = "Olá, " + CONTATO.nome + "! Meu nome é " + dados.nome + " e quero receber o seu mídia kit completo no e-mail " + dados.email + ".";
+      const texto = t(
+        "Olá, " + CONTATO.nome + "! Meu nome é " + dados.nome + " e quero receber o seu mídia kit completo no e-mail " + dados.email + ".",
+        "Hi, " + CONTATO.nome + "! My name is " + dados.nome + " and I'd like to receive your full media kit at " + dados.email + "."
+      );
       caixa.innerHTML = '<div class="confirmacao-icone">' + iconeCheck + "</div>" +
-        "<h2>Falta só um toque, " + nome + "!</h2><p>Escolha por onde me enviar o pedido. O texto já vai escrito.</p>" +
+        "<h2>" + t("Falta só um toque, ", "Just one more tap, ") + nome + "!</h2><p>" + t("Escolha por onde me enviar o pedido. O texto já vai escrito.", "Choose how to send your request. The text is already written.") + "</p>" +
         '<div class="confirmacao-botoes">' +
-          '<a class="botao botao--verde" href="' + esc(linkWhats(texto)) + '" target="_blank" rel="noopener">Pedir pelo WhatsApp</a>' +
-          '<a class="botao botao--contorno" href="' + esc(linkEmail("Quero o mídia kit", texto)) + '">Pedir por e-mail</a>' +
+          '<a class="botao botao--verde" href="' + esc(linkWhats(texto)) + '" target="_blank" rel="noopener">' + t("Pedir pelo WhatsApp", "Ask via WhatsApp") + "</a>" +
+          '<a class="botao botao--contorno" href="' + esc(linkEmail(t("Quero o mídia kit", "Media kit request"), texto)) + '">' + t("Pedir por e-mail", "Ask by email") + "</a>" +
         "</div>";
     }
     $("capturaConteudo").hidden = true;
@@ -1295,6 +1338,27 @@ const DEPOIMENTOS = [
 
   /* Ano automático no rodapé */
   $("ano").textContent = new Date().getFullYear();
+
+  /* Troca de idioma: cada texto traduzível tem a versão em inglês no atributo data-en */
+  const TITULO = { pt: document.title, en: "Ana Paula Mendes | UGC Portfolio" };
+  function aplicarIdioma(novo) {
+    idioma = novo;
+    document.documentElement.lang = novo === "en" ? "en" : "pt-BR";
+    document.title = TITULO[novo];
+    document.querySelectorAll("[data-en]").forEach((el) => {
+      if (el.dataset.pt === undefined) el.dataset.pt = el.textContent;
+      el.textContent = novo === "en" ? el.dataset.en : el.dataset.pt;
+    });
+    document.querySelectorAll("[data-en-aria]").forEach((el) => {
+      if (el.dataset.ptAria === undefined) el.dataset.ptAria = el.getAttribute("aria-label") || "";
+      el.setAttribute("aria-label", novo === "en" ? el.dataset.enAria : el.dataset.ptAria);
+    });
+    document.querySelectorAll("[data-idioma]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.idioma === novo)));
+    menu(menuLista.classList.contains("aberto"));
+    try { localStorage.setItem("idioma", novo); } catch (erro) { /* sem armazenamento */ }
+  }
+  document.querySelectorAll("[data-idioma]").forEach((b) => b.addEventListener("click", () => aplicarIdioma(b.dataset.idioma)));
+  if (idioma === "en") aplicarIdioma("en");
 })();
 </script>
 </body>
