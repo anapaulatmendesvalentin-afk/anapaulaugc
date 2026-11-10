@@ -373,6 +373,11 @@
     background: linear-gradient(180deg, rgba(20, 24, 16, .3) 0%, rgba(20, 24, 16, 0) 20%);
     color: var(--branco);
   }
+  .video-destaque {
+    position: absolute; bottom: 12px; left: 12px; max-width: calc(100% - 24px);
+    padding: 4px 10px; background: var(--terracota); color: #fff;
+    border-radius: 999px; font-size: .68rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
   .video-selo {
     position: absolute; top: 12px; left: 12px; max-width: calc(100% - 24px);
     padding: 4px 10px; background: rgba(255, 255, 255, .92); color: var(--tinta);
@@ -791,6 +796,9 @@
 
 <noscript><p style="padding:16px;text-align:center">Para ver os trabalhos, ative o JavaScript ou fale comigo pelo e-mail anapaula.ugcmanager@gmail.com.</p></noscript>
 
+<!-- Ligação com o painel (Supabase): vídeos, formulário de contato e visitas -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<script src="js/banco.js"></script>
 <script>
 /* =====================================================================
    SEUS DADOS: edite só esta parte, sem mexer no HTML.
@@ -834,7 +842,9 @@ const MARCAS = [
   { nome: "Pano Curto",     logo: "logo-panocurto.webp" }
 ];
 
-/* NICHOS: cada nicho vira um bloco com os vídeos lado a lado, nesta ordem.
+/* NICHOS: os vídeos agora vêm do painel (aba Portfólio, tabela "videos").
+   Esta lista fica só de reserva: o site usa ela se o banco não responder.
+   Também é daqui que sai o nome em inglês de cada nicho.
    nome / en = nome do nicho em português e em inglês.
    yt    = o código do vídeo no YouTube (o que vem depois de /shorts/ no link).
    marca = nome que aparece na etiqueta em cima do vídeo. Pode ficar vazio.
@@ -1028,7 +1038,42 @@ const DEPOIMENTOS = [
 
   /* Trabalhos: um bloco por nicho, com os vídeos lado a lado */
   const slug = (t) => "nicho-" + t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-  const nichosComVideo = NICHOS.filter((n) => n.videos && n.videos.length);
+  const bancoSite = window.criarBanco ? window.criarBanco(false) : null;
+  const idYoutube = (link) => {
+    const t = String(link || "").trim();
+    const m = t.match(/(?:shorts\/|[?&]v=|youtu\.be\/|embed\/)([\w-]{11})/);
+    return m ? m[1] : (/^[\w-]{11}$/.test(t) ? t : "");
+  };
+
+  /* Busca os vídeos visíveis no painel e agrupa por nicho, na ordem do painel.
+     Se o banco não responder em 5 segundos, devolve null e o site usa a lista NICHOS. */
+  async function carregarVideosDoPainel() {
+    if (!bancoSite) return null;
+    try {
+      const pedido = bancoSite.from("videos").select("link, nicho, marca, destaque, ordem, id")
+        .eq("visivel", true).order("ordem", { ascending: true }).order("id", { ascending: true });
+      const limite = new Promise((resolver) => setTimeout(() => resolver({ error: "demorou" }), 5000));
+      const { data, error } = await Promise.race([pedido, limite]);
+      if (error || !Array.isArray(data) || !data.length) return null;
+      const ingles = {};
+      NICHOS.forEach((n) => { ingles[n.nome] = n.en; });
+      const grupos = [];
+      data.forEach((v) => {
+        const yt = idYoutube(v.link);
+        if (!yt) return;
+        const nome = String(v.nicho || "").trim() || "Outros";
+        let g = grupos.find((x) => x.nome === nome);
+        if (!g) { g = { nome, en: ingles[nome] || nome, videos: [] }; grupos.push(g); }
+        g.videos.push({ yt, marca: v.marca || "", destaque: v.destaque || "" });
+      });
+      return grupos.length ? grupos : null;
+    } catch (erro) {
+      return null;
+    }
+  }
+
+  function desenharNichos(lista) {
+  const nichosComVideo = lista.filter((n) => n.videos && n.videos.length);
 
   $("atalhosNichos").innerHTML = nichosComVideo.map((n) =>
     '<a class="filtro" href="#' + slug(n.nome) + '"' + attrEn(n.en || n.nome) + ">" + esc(n.nome) + "</a>"
@@ -1056,6 +1101,7 @@ const DEPOIMENTOS = [
               ' onerror="this.onerror=null;this.src=\'https://i.ytimg.com/vi/' + esc(v.yt) + '/hqdefault.jpg\'">' +
             '<div class="video-capa" aria-hidden="true">' +
               (v.marca ? '<span class="video-selo">' + esc(v.marca) + "</span>" : "") +
+              (v.destaque ? '<span class="video-destaque">' + esc(v.destaque) + "</span>" : "") +
             "</div>" +
             '<button type="button" class="video-play" aria-label="' + esc(rotulo) + '"' + attrEnAria(rotuloEn) + ">" +
               '<span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>' +
@@ -1065,6 +1111,9 @@ const DEPOIMENTOS = [
       }).join("") + "</ul>" +
     "</section>";
   }).join("");
+  ajustarSetas();
+  if (typeof idioma !== "undefined" && idioma === "en") aplicarIdioma("en");
+  }
 
   /* As setas só aparecem quando há mais vídeos do que cabem na tela */
   function ajustarSetas() {
@@ -1073,8 +1122,36 @@ const DEPOIMENTOS = [
       bloco.querySelector(".nicho-setas").hidden = linha.scrollWidth <= linha.clientWidth + 4;
     });
   }
-  ajustarSetas();
   window.addEventListener("resize", ajustarSetas);
+  carregarVideosDoPainel().then((doPainel) => desenharNichos(doPainel || NICHOS));
+
+  /* Contador de visitas do painel: uma visita por sessão do navegador.
+     Grava só a página e de onde a pessoa veio. Nada de serviço de fora, nada pedido ao visitante. */
+  (function registrarVisita() {
+    if (!bancoSite || !/^https?:$/.test(location.protocol) || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) return;
+    try {
+      if (sessionStorage.getItem("visitaContada") === "1") return;
+      sessionStorage.setItem("visitaContada", "1");
+    } catch (erro) { /* sem armazenamento: conta mesmo assim */ }
+    const NOMES = [[/instagram/, "Instagram"], [/facebook|fb\.com/, "Facebook"], [/google\./, "Google"], [/bing\./, "Bing"],
+      [/whatsapp|wa\.me/, "WhatsApp"], [/linkedin|lnkd/, "LinkedIn"], [/tiktok/, "TikTok"], [/youtube|youtu\.be/, "YouTube"],
+      [/(^|\.)t\.co$|twitter|(^|\.)x\.com$/, "X (Twitter)"], [/pinterest/, "Pinterest"], [/linktr\.ee|linktree/, "Linktree"]];
+    let origem = "Direto";
+    const utm = new URLSearchParams(location.search).get("utm_source");
+    if (utm) {
+      origem = utm;
+    } else if (document.referrer) {
+      try {
+        const host = new URL(document.referrer).hostname.replace(/^www\./, "");
+        if (host && host !== location.hostname) {
+          const achado = NOMES.find((n) => n[0].test(host));
+          origem = achado ? achado[1] : host;
+        }
+      } catch (erro) { /* referência estranha: fica Direto */ }
+    }
+    bancoSite.from("visitas").insert({ pagina: location.pathname.slice(0, 300), origem: String(origem).slice(0, 300) })
+      .then(() => {}, () => {});
+  })();
 
   /* Player dos vídeos: roda dentro do card, sem a interface do YouTube.
      Mouse em cima = prévia sem som. Clique ou toque = toca com som; clique de novo = pausa. */
@@ -1290,12 +1367,37 @@ const DEPOIMENTOS = [
     formContato.hidden = false;
   }
 
+  /* O formulário de contato entra direto na aba Marcas do painel, como Lead.
+     Se o banco não responder, a pessoa termina o envio pelo WhatsApp ou e-mail. */
+  async function salvarLead(dados, orcamentoTexto) {
+    if (!bancoSite) return false;
+    const hoje = new Date();
+    const obs = [
+      "Veio pelo formulário do site. Nome: " + dados.nome,
+      orcamentoTexto ? "Orçamento estimado: " + orcamentoTexto : "",
+      dados.mensagem ? "Mensagem: " + dados.mensagem : ""
+    ].filter(Boolean).join("\n");
+    try {
+      const { error } = await bancoSite.from("marcas").insert({
+        nome: String(dados.marca || dados.nome || "").trim().slice(0, 200) || "Sem nome",
+        email: String(dados.email || "").trim().slice(0, 200),
+        situacao: "lead",
+        obs: obs.slice(0, 3000),
+        ultimo_contato: hoje.getFullYear() + "-" + String(hoje.getMonth() + 1).padStart(2, "0") + "-" + String(hoje.getDate()).padStart(2, "0")
+      });
+      return !error;
+    } catch (erro) {
+      return false;
+    }
+  }
+
   formContato.addEventListener("submit", async (e) => {
     e.preventDefault();
     const botao = formContato.querySelector("button");
     const dados = Object.fromEntries(new FormData(formContato));
+    const orcamentoEscolhido = formContato.elements.orcamento.selectedIndex > 0 ? formContato.elements.orcamento.options[formContato.elements.orcamento.selectedIndex].textContent : "";
     botao.disabled = true;
-    const enviado = await enviarDados(Object.assign({ origem: "Contato do portfólio" }, dados));
+    const enviado = (await salvarLead(dados, orcamentoEscolhido)) || (await enviarDados(Object.assign({ origem: "Contato do portfólio" }, dados)));
     botao.disabled = false;
 
     const nome = esc(primeiroNome(dados.nome));
