@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Entrar | Painel Ana Paula</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --branco: #ffffff; --gelo: #f6f3ee; --verde: #4b5a32; --verde-escuro: #2f3a1f; --verde-claro: #e7eadb;
+    --terracota: #b5563a; --terracota-claro: #f4c9b5; --tinta: #1f231a; --suave: #5a5b4c; --linha: #e8e2d8;
+    --raio: 24px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px;
+    background: var(--gelo); color: var(--tinta);
+    font-family: "Manrope", system-ui, sans-serif; font-size: 14px; line-height: 1.5;
+  }
+  .cartao {
+    width: min(100%, 380px); background: var(--branco); border: 1px solid var(--linha);
+    border-radius: var(--raio); padding: 28px 24px; box-shadow: 0 10px 30px rgba(31, 35, 26, .08);
+  }
+  .marca { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--verde); margin: 0 0 6px; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .sub { color: var(--suave); margin: 0 0 20px; }
+  label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 14px; }
+  input {
+    display: block; width: 100%; margin-top: 6px; padding: 10px 12px; font: inherit; color: inherit;
+    border: 1px solid var(--linha); border-radius: 12px; background: var(--branco);
+  }
+  input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--verde); outline-offset: 2px; }
+  .botao {
+    width: 100%; padding: 11px 16px; border: 0; border-radius: 999px; cursor: pointer;
+    background: var(--verde); color: var(--branco); font: inherit; font-weight: 700;
+  }
+  .botao:hover { background: var(--verde-escuro); }
+  .botao:disabled { opacity: .6; cursor: wait; }
+  .link { display: inline-block; margin-top: 14px; background: none; border: 0; padding: 0; color: var(--verde); font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; }
+  .faixa { border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; font-weight: 600; }
+  .faixa.erro { background: #fbe4dc; color: #7a2f1b; }
+  .faixa.ok { background: var(--verde-claro); color: var(--verde-escuro); }
+  .voltar { display: block; text-align: center; margin-top: 18px; color: var(--suave); font-size: 13px; }
+</style>
+</head>
+<body>
+  <main class="cartao" id="cartao" hidden>
+    <p class="marca">Painel Ana Paula</p>
+
+    <!-- Entrar -->
+    <section id="telaEntrar">
+      <h1>Entrar</h1>
+      <p class="sub">Use o seu e-mail e a sua senha.</p>
+      <div class="faixa erro" id="erroEntrar" role="alert" hidden></div>
+      <form id="formEntrar" novalidate>
+        <label>E-mail<input type="email" name="email" autocomplete="username" required></label>
+        <label>Senha<input type="password" name="senha" autocomplete="current-password" required></label>
+        <button class="botao" type="submit">Entrar</button>
+      </form>
+      <button class="link" type="button" id="abrirEsqueci">Esqueci minha senha</button>
+    </section>
+
+    <!-- Esqueci minha senha -->
+    <section id="telaEsqueci" hidden>
+      <h1>Recuperar a senha</h1>
+      <p class="sub">Vou mandar um link para você criar uma senha nova.</p>
+      <div class="faixa" id="avisoEsqueci" role="status" hidden></div>
+      <form id="formEsqueci" novalidate>
+        <label>E-mail<input type="email" name="email" autocomplete="username" required></label>
+        <button class="botao" type="submit">Enviar o link</button>
+      </form>
+      <button class="link" type="button" id="voltarEntrar">Voltar para entrar</button>
+    </section>
+
+    <!-- Nova senha (quando a pessoa chega pelo link do e-mail) -->
+    <section id="telaNovaSenha" hidden>
+      <h1>Criar senha nova</h1>
+      <p class="sub">Escolha uma senha com pelo menos 8 caracteres.</p>
+      <div class="faixa" id="avisoNovaSenha" role="status" hidden></div>
+      <form id="formNovaSenha" novalidate>
+        <label>Senha nova<input type="password" name="senha" autocomplete="new-password" minlength="8" required></label>
+        <button class="botao" type="submit">Salvar e entrar</button>
+      </form>
+    </section>
+
+    <a class="voltar" href="../">Voltar para o portfólio</a>
+  </main>
+
+  <noscript><p>Para entrar no painel, ative o JavaScript.</p></noscript>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<script src="../js/banco.js"></script>
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const cartao = $("cartao");
+  const banco = window.criarBanco ? window.criarBanco(true) : null;
+
+  function faixa(el, texto, tipo) {
+    el.textContent = texto;
+    el.className = "faixa " + (tipo || "erro");
+    el.hidden = !texto;
+  }
+  function mostrar(tela) {
+    ["telaEntrar", "telaEsqueci", "telaNovaSenha"].forEach((id) => { $(id).hidden = id !== tela; });
+    const campo = $(tela).querySelector("input");
+    if (campo) campo.focus();
+  }
+  function emailValido(t) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t); }
+
+  cartao.hidden = false;
+
+  if (!banco) {
+    faixa($("erroEntrar"), "Não consegui me conectar agora. Confira a internet e recarregue a página.");
+    return;
+  }
+
+  /* Quem chega pelo link de recuperação de senha vê a tela de senha nova */
+  const veioRecuperar = /type=recovery/.test(location.hash) || /nova-senha/.test(location.search);
+  banco.auth.onAuthStateChange((evento) => {
+    if (evento === "PASSWORD_RECOVERY") mostrar("telaNovaSenha");
+  });
+
+  if (veioRecuperar) {
+    mostrar("telaNovaSenha");
+  } else {
+    /* Já tem sessão aberta: vai direto para o painel */
+    const { data } = await banco.auth.getSession();
+    if (data && data.session) { location.replace("../admin/"); return; }
+    mostrar("telaEntrar");
+  }
+
+  $("formEntrar").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value.trim();
+    const senha = form.senha.value;
+    if (!emailValido(email) || !senha) { faixa($("erroEntrar"), "Preencha o e-mail e a senha."); return; }
+    const botao = form.querySelector("button");
+    botao.disabled = true; botao.textContent = "Entrando...";
+    faixa($("erroEntrar"), "");
+    try {
+      const { error } = await banco.auth.signInWithPassword({ email, password: senha });
+      if (error) {
+        const naRede = /fetch|network/i.test(error.message || "");
+        faixa($("erroEntrar"), naRede ? "Sem conexão agora. Confira a internet e tente de novo." : "E-mail ou senha incorretos");
+      } else {
+        location.replace("../admin/");
+        return;
+      }
+    } catch (erro) {
+      faixa($("erroEntrar"), "Sem conexão agora. Confira a internet e tente de novo.");
+    }
+    botao.disabled = false; botao.textContent = "Entrar";
+  });
+
+  $("abrirEsqueci").addEventListener("click", () => {
+    $("formEsqueci").email.value = $("formEntrar").email.value;
+    faixa($("avisoEsqueci"), "");
+    mostrar("telaEsqueci");
+  });
+  $("voltarEntrar").addEventListener("click", () => mostrar("telaEntrar"));
+
+  $("formEsqueci").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value.trim();
+    if (!emailValido(email)) { faixa($("avisoEsqueci"), "Digite um e-mail válido."); return; }
+    const botao = e.target.querySelector("button");
+    botao.disabled = true;
+    const volta = location.origin + location.pathname.replace(/[^/]*$/, "") + "?nova-senha=1";
+    try {
+      await banco.auth.resetPasswordForEmail(email, { redirectTo: volta });
+    } catch (erro) { /* a resposta é a mesma de qualquer jeito */ }
+    botao.disabled = false;
+    faixa($("avisoEsqueci"), "Se esse e-mail tiver acesso ao painel, o link chega em alguns minutos. Olhe também o spam.", "ok");
+  });
+
+  $("formNovaSenha").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const senha = e.target.senha.value;
+    if (senha.length < 8) { faixa($("avisoNovaSenha"), "A senha precisa ter pelo menos 8 caracteres."); return; }
+    const botao = e.target.querySelector("button");
+    botao.disabled = true;
+    const { error } = await banco.auth.updateUser({ password: senha });
+    botao.disabled = false;
+    if (error) {
+      faixa($("avisoNovaSenha"), "O link expirou ou já foi usado. Peça um novo em \"Esqueci minha senha\".");
+    } else {
+      faixa($("avisoNovaSenha"), "Senha salva. Abrindo o painel...", "ok");
+      setTimeout(() => location.replace("../admin/"), 900);
+    }
+  });
+})();
+</script>
+</body>
+</html>
