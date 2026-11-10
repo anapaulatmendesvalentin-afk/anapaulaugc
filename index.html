@@ -287,13 +287,15 @@
   .video-card { scroll-snap-align: start; min-width: 0; }
   .video-frame { position: relative; aspect-ratio: 9 / 16; overflow: hidden; background: var(--verde-escuro); border-radius: 20px; box-shadow: var(--sombra); }
   .video-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  /* O player fica um pouco ampliado e sem cliques, para esconder a interface do YouTube */
+  /* O player é mais alto que o card: o vídeo ocupa o card inteiro e as faixas
+     de cima e de baixo, onde o YouTube põe título, canal e logo, ficam cortadas.
+     Ele só aparece quando o vídeo já está rodando, e não recebe cliques. */
   .video-player {
-    position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; border: 0;
-    transform: translate(-50%, -50%) scale(1.22); pointer-events: none;
-    opacity: 0; transition: opacity .35s ease;
+    position: absolute; top: 50%; left: 0; width: 100%; height: calc(100% + 180px); border: 0;
+    transform: translateY(-50%); pointer-events: none;
+    opacity: 0; transition: opacity .3s ease;
   }
-  .video-frame.ativo .video-player { opacity: 1; }
+  .video-frame.rodando .video-player { opacity: 1; }
   .video-capa {
     position: absolute; inset: 0; z-index: 2; pointer-events: none;
     display: flex; flex-direction: column; justify-content: flex-end; padding: 14px;
@@ -1021,7 +1023,8 @@ const DEPOIMENTOS = [
     p.tabIndex = -1;
     p.setAttribute("aria-hidden", "true");
     p.addEventListener("load", () => {
-      p.contentWindow.postMessage(JSON.stringify({ event: "listening" }), "*");
+      p.contentWindow.postMessage(JSON.stringify({ event: "listening", id: frame.dataset.yt, channel: "widget" }), "*");
+      comando(frame, "addEventListener", ["onStateChange"]);
       semLegenda(frame);
       setTimeout(() => semLegenda(frame), 1200);
       if (frame.classList.contains("com-som")) { comando(frame, "unMute"); comando(frame, "setVolume", [100]); comando(frame, "playVideo"); }
@@ -1042,12 +1045,30 @@ const DEPOIMENTOS = [
     }
     comando(frame, "playVideo");
     semLegenda(frame);
+    /* Garantia: se o YouTube não avisar, mostra o vídeo depois de alguns segundos */
+    clearTimeout(frame._garantia);
+    frame._garantia = setTimeout(() => { if (frame.classList.contains("ativo")) frame.classList.add("rodando"); }, 3000);
   }
   function parar(frame) {
-    frame.classList.remove("ativo", "com-som");
+    frame.classList.remove("ativo", "com-som", "rodando");
     comando(frame, "pauseVideo");
     comando(frame, "mute");
   }
+
+  /* O YouTube avisa quando o vídeo começa a rodar; só então o player aparece por cima da capa */
+  window.addEventListener("message", (e) => {
+    if (!/^https:\/\/www\.youtube(-nocookie)?\.com$/.test(e.origin)) return;
+    let dados;
+    try { dados = typeof e.data === "string" ? JSON.parse(e.data) : e.data; } catch (erro) { return; }
+    if (!dados) return;
+    const estado = dados.event === "onStateChange" ? dados.info : (dados.info && dados.info.playerState);
+    if (estado === undefined || estado === null) return;
+    document.querySelectorAll(".video-frame").forEach((frame) => {
+      if (!frame._player || frame._player.contentWindow !== e.source) return;
+      if (estado === 1 && frame.classList.contains("ativo")) frame.classList.add("rodando");
+      else if (estado !== 1 && estado !== 3) frame.classList.remove("rodando");
+    });
+  });
 
   const blocos = $("blocosNichos");
   blocos.addEventListener("pointerover", (e) => {
