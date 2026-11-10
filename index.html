@@ -286,15 +286,35 @@
   }
   .video-card { scroll-snap-align: start; min-width: 0; }
   .video-frame { position: relative; aspect-ratio: 9 / 16; overflow: hidden; background: var(--verde-escuro); border-radius: 20px; box-shadow: var(--sombra); }
-  .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-  .video-play { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
-  .video-play img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
-  .video-play:hover img { transform: scale(1.04); }
-  .video-play .play { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
-  .video-play .play svg { width: 22px; height: 22px; }
+  .video-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* O player fica um pouco ampliado e sem cliques, para esconder a interface do YouTube */
+  .video-player {
+    position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; border: 0;
+    transform: translate(-50%, -50%) scale(1.22); pointer-events: none;
+    opacity: 0; transition: opacity .35s ease;
+  }
+  .video-frame.ativo .video-player { opacity: 1; }
+  .video-capa {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 14px;
+    background: linear-gradient(180deg, rgba(20, 24, 16, .35) 0%, rgba(20, 24, 16, 0) 22%, rgba(20, 24, 16, 0) 58%, rgba(20, 24, 16, .78) 100%);
+    color: var(--branco);
+  }
+  .video-selo {
+    position: absolute; top: 12px; left: 12px; max-width: calc(100% - 24px);
+    padding: 4px 10px; background: rgba(255, 255, 255, .92); color: var(--tinta);
+    border-radius: 999px; font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .video-titulo { font-size: clamp(1.05rem, 1.8vw, 1.35rem); font-weight: 800; line-height: 1.15; letter-spacing: -.01em; }
+  .video-nicho { margin-top: 3px; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+  .video-play { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
+  .video-play .play { width: 56px; height: 56px; margin: -28px 0 0 -28px; background: var(--verde); transition: transform .25s ease, opacity .25s ease; }
+  .video-play .play svg { width: 22px; height: 22px; fill: var(--branco); }
   .video-play:hover .play { transform: scale(1.1); }
+  .video-frame.ativo .play { opacity: 0; }
+  .video-frame.ativo .video-play:hover .play, .video-frame.com-som .video-play:focus-visible .play { opacity: .9; }
   @media (max-width: 720px) { .videos-linha { --por-linha: 2; } }
-  .video-marca { margin-top: 8px; font-size: .92rem; font-weight: 700; text-align: center; }
   .produtos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
   .produto {
     display: flex; flex-direction: column; padding: 10px;
@@ -950,13 +970,17 @@ const DEPOIMENTOS = [
       '<ul class="videos-linha">' + n.videos.map((v) => {
         const rotulo = "Assistir vídeo" + (v.marca ? " para " + v.marca : "") + ", " + n.nome;
         return '<li class="video-card">' +
-          '<div class="video-frame">' +
-            '<button type="button" class="video-play" data-yt="' + esc(v.yt) + '" aria-label="' + esc(rotulo) + '">' +
-              '<img src="https://i.ytimg.com/vi/' + esc(v.yt) + '/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">' +
+          '<div class="video-frame" data-yt="' + esc(v.yt) + '">' +
+            '<img class="video-thumb" src="https://i.ytimg.com/vi/' + esc(v.yt) + '/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">' +
+            '<div class="video-capa" aria-hidden="true">' +
+              (v.marca ? '<span class="video-selo">' + esc(v.marca) + "</span>" : "") +
+              '<span class="video-titulo">' + esc(v.marca || n.nome) + "</span>" +
+              '<span class="video-nicho">' + esc(n.nome) + "</span>" +
+            "</div>" +
+            '<button type="button" class="video-play" aria-label="' + esc(rotulo) + '">' +
               '<span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>' +
             "</button>" +
           "</div>" +
-          (v.marca ? '<p class="video-marca">' + esc(v.marca) + "</p>" : "") +
         "</li>";
       }).join("") + "</ul>" +
     "</section>";
@@ -972,8 +996,71 @@ const DEPOIMENTOS = [
   ajustarSetas();
   window.addEventListener("resize", ajustarSetas);
 
-  /* Toque no vídeo: troca a capa pelo player do YouTube, só quando a pessoa pede */
-  $("blocosNichos").addEventListener("click", (e) => {
+  /* Player dos vídeos: roda dentro do card, sem a interface do YouTube.
+     Mouse em cima = prévia sem som. Clique ou toque = toca com som; clique de novo = pausa. */
+  function comando(frame, func, args) {
+    if (frame._player && frame._player.contentWindow) {
+      frame._player.contentWindow.postMessage(JSON.stringify({ event: "command", func: func, args: args || [] }), "*");
+    }
+  }
+  function semLegenda(frame) {
+    comando(frame, "unloadModule", ["captions"]);
+    comando(frame, "unloadModule", ["cc"]);
+  }
+  function criarPlayer(frame) {
+    if (frame._player) return;
+    const yt = encodeURIComponent(frame.dataset.yt);
+    const p = document.createElement("iframe");
+    p.className = "video-player";
+    p.src = "https://www.youtube-nocookie.com/embed/" + yt +
+      "?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&loop=1&playlist=" + yt +
+      "&iv_load_policy=3&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&enablejsapi=1" +
+      "&origin=" + encodeURIComponent(location.origin);
+    p.title = frame.querySelector(".video-play").getAttribute("aria-label");
+    p.allow = "autoplay; encrypted-media";
+    p.tabIndex = -1;
+    p.setAttribute("aria-hidden", "true");
+    p.addEventListener("load", () => {
+      p.contentWindow.postMessage(JSON.stringify({ event: "listening" }), "*");
+      semLegenda(frame);
+      setTimeout(() => semLegenda(frame), 1200);
+      if (frame.classList.contains("com-som")) { comando(frame, "unMute"); comando(frame, "setVolume", [100]); comando(frame, "playVideo"); }
+      else if (!frame.classList.contains("ativo")) comando(frame, "pauseVideo");
+    });
+    frame.insertBefore(p, frame.querySelector(".video-capa"));
+    frame._player = p;
+  }
+  function tocar(frame, comSom) {
+    criarPlayer(frame);
+    frame.classList.add("ativo");
+    if (comSom) {
+      document.querySelectorAll(".video-frame.com-som").forEach((outro) => { if (outro !== frame) parar(outro); });
+      frame.classList.add("com-som");
+      comando(frame, "unMute"); comando(frame, "setVolume", [100]);
+    } else {
+      comando(frame, "mute");
+    }
+    comando(frame, "playVideo");
+    semLegenda(frame);
+  }
+  function parar(frame) {
+    frame.classList.remove("ativo", "com-som");
+    comando(frame, "pauseVideo");
+    comando(frame, "mute");
+  }
+
+  const blocos = $("blocosNichos");
+  blocos.addEventListener("pointerover", (e) => {
+    if (e.pointerType !== "mouse") return;
+    const frame = e.target.closest(".video-frame");
+    if (frame && !frame.contains(e.relatedTarget) && !frame.classList.contains("com-som")) tocar(frame, false);
+  });
+  blocos.addEventListener("pointerout", (e) => {
+    if (e.pointerType !== "mouse") return;
+    const frame = e.target.closest(".video-frame");
+    if (frame && !frame.contains(e.relatedTarget) && !frame.classList.contains("com-som")) parar(frame);
+  });
+  blocos.addEventListener("click", (e) => {
     const seta = e.target.closest("[data-seta]");
     if (seta) {
       const linha = seta.closest(".nicho").querySelector(".videos-linha");
@@ -982,13 +1069,9 @@ const DEPOIMENTOS = [
     }
     const botao = e.target.closest(".video-play");
     if (!botao) return;
-    const frame = document.createElement("iframe");
-    frame.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(botao.dataset.yt) + "?autoplay=1&playsinline=1&rel=0";
-    frame.title = botao.getAttribute("aria-label");
-    frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
-    frame.allowFullscreen = true;
-    botao.replaceWith(frame);
-    frame.focus();
+    const frame = botao.closest(".video-frame");
+    if (frame.classList.contains("com-som")) { parar(frame); botao.setAttribute("aria-pressed", "false"); }
+    else { tocar(frame, true); botao.setAttribute("aria-pressed", "true"); }
   });
 
   /* Serviços */
