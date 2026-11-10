@@ -30,7 +30,7 @@
     --raio: 24px;
     --raio-grande: 36px;
     --largura: 1200px;
-    --respiro: clamp(64px, 9vw, 112px);
+    --respiro: clamp(40px, 5vw, 64px);
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -447,10 +447,17 @@
 
   .campo { display: block; margin-bottom: 16px; }
   .campo span { display: block; margin-bottom: 6px; font-weight: 700; font-size: .94rem; }
-  .campo input, .campo textarea {
+  .campos-duplos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; }
+  @media (max-width: 520px) { .campos-duplos { grid-template-columns: minmax(0, 1fr); } }
+  .campo select { appearance: none; -webkit-appearance: none; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--suave) 50%), linear-gradient(135deg, var(--suave) 50%, transparent 50%);
+    background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 40px; }
+  .campo input, .campo textarea, .campo select {
     display: block; width: 100%; min-height: 50px; padding: 12px 16px;
-    background: var(--gelo); border: 2px solid #8c8a78; border-radius: 16px;
+    background-color: var(--gelo); border: 2px solid #8c8a78; border-radius: 16px;
   }
+  .campo select { padding-right: 40px; }
+  .campo select:focus-visible { border-color: var(--verde); border-radius: 16px; }
   .campo textarea { min-height: 130px; resize: vertical; }
   .campo input:focus-visible, .campo textarea:focus-visible { border-color: var(--verde); border-radius: 16px; }
   .form-botao { width: 100%; }
@@ -687,6 +694,19 @@
           <form id="formContato">
             <label class="campo"><span data-en="Name">Nome</span><input type="text" name="nome" autocomplete="name" required></label>
             <label class="campo"><span data-en="Email">E-mail</span><input type="email" name="email" autocomplete="email" required></label>
+            <div class="campos-duplos">
+              <label class="campo"><span data-en="Brand">Marca</span><input type="text" name="marca" autocomplete="organization"></label>
+              <label class="campo"><span data-en="Estimated budget">Orçamento estimado</span>
+                <select name="orcamento">
+                  <option value="" data-en="Select">Selecione</option>
+                  <option value="Até R$ 500" data-en="Up to R$ 500">Até R$ 500</option>
+                  <option value="R$ 500 a R$ 1.000" data-en="R$ 500 to R$ 1,000">R$ 500 a R$ 1.000</option>
+                  <option value="R$ 1.000 a R$ 3.000" data-en="R$ 1,000 to R$ 3,000">R$ 1.000 a R$ 3.000</option>
+                  <option value="Acima de R$ 3.000" data-en="Over R$ 3,000">Acima de R$ 3.000</option>
+                  <option value="Ainda não sei" data-en="Not sure yet">Ainda não sei</option>
+                </select>
+              </label>
+            </div>
             <label class="campo"><span data-en="Message">Mensagem</span><textarea name="mensagem" rows="5" required></textarea></label>
             <button class="botao botao--verde form-botao" type="submit" data-en="Send message">Enviar mensagem</button>
           </form>
@@ -709,7 +729,6 @@
               <span><b>Instagram</b><small>@anapaulaugcmanager</small></span>
             </a>
           </div>
-          <p class="contato-cidade" data-en="Straight from Joinville to your brand.">Direto de Joinville para a sua marca.</p>
         </aside>
       </div>
     </div>
@@ -1240,7 +1259,11 @@ const DEPOIMENTOS = [
         "<h3>" + t("Recebi sua mensagem, ", "Got your message, ") + nome + "!</h3>" +
         "<p>" + t("Vou ler com calma e responder no e-mail ", "I'll read it carefully and reply to ") + esc(dados.email) + ".</p>";
     } else {
-      const texto = t("Olá, " + CONTATO.nome + "! Meu nome é ", "Hi, " + CONTATO.nome + "! My name is ") + dados.nome + " (" + dados.email + ").\n\n" + dados.mensagem;
+      const orcamentoTexto = formContato.elements.orcamento.selectedIndex > 0 ? formContato.elements.orcamento.options[formContato.elements.orcamento.selectedIndex].textContent : "";
+      const texto = t("Olá, " + CONTATO.nome + "! Meu nome é ", "Hi, " + CONTATO.nome + "! My name is ") + dados.nome + " (" + dados.email + ")." +
+        (dados.marca ? "\n" + t("Marca: ", "Brand: ") + dados.marca : "") +
+        (orcamentoTexto ? "\n" + t("Orçamento estimado: ", "Estimated budget: ") + orcamentoTexto : "") +
+        "\n\n" + dados.mensagem;
       confirmacaoContato.innerHTML =
         '<div class="confirmacao-icone">' + iconeCheck + "</div>" +
         "<h3>" + t("Sua mensagem está pronta, ", "Your message is ready, ") + nome + "!</h3>" +
