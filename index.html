@@ -434,9 +434,8 @@
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; animation: none !important; }
-    .faixa-trilho { width: auto; justify-content: center; }
-    .faixa-trilho ul { flex-wrap: wrap; justify-content: center; row-gap: 16px; flex-shrink: 1; }
-    .faixa-trilho ul[aria-hidden="true"] { display: none; }
+    /* O carrossel de logos continua andando sempre, por escolha da Ana Paula */
+    .faixa-trilho { animation: desliza 40s linear infinite !important; }
     .oculto { opacity: 1; transform: none; }
   }
 </style>
