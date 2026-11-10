@@ -879,6 +879,14 @@ const NICHOS = [
   ]}
 ];
 
+/* CAPAS: capa escolhida por você para um vídeo, no lugar da capa do YouTube.
+   À esquerda, o código do vídeo no YouTube; à direita, o arquivo da imagem na pasta do site. */
+const CAPAS = {
+  "bpp8WohNMl8": "foto-video-knut.webp",
+  "cEttY8E7l8M": "foto-video-colorwow2.webp",
+  "QK1CwChhF7g": "foto-video-maisblond.webp"
+};
+
 /* FRASES_TIRA: as palavras da tira verde que passa entre o Sobre mim e o Catálogo. */
 const FRASES_TIRA = [
   { pt: "Conexão real", en: "Real connection" },
@@ -1065,7 +1073,7 @@ const DEPOIMENTOS = [
         const rotuloEn = "Watch video" + (v.marca ? " for " + v.marca : "") + ", " + nomeEn;
         return '<li class="video-card">' +
           '<div class="video-frame" data-yt="' + esc(v.yt) + '">' +
-            '<img class="video-thumb" src="https://i.ytimg.com/vi/' + esc(v.yt) + '/oar2.jpg" alt="" loading="lazy" decoding="async" width="1080" height="1920"' +
+            '<img class="video-thumb" src="' + (CAPAS[v.yt] ? esc(CAPAS[v.yt]) : "https://i.ytimg.com/vi/" + esc(v.yt) + "/oar2.jpg") + '" alt="" loading="lazy" decoding="async" width="1080" height="1920"' +
               ' onerror="this.onerror=null;this.src=\'https://i.ytimg.com/vi/' + esc(v.yt) + '/hqdefault.jpg\'">' +
             '<div class="video-capa" aria-hidden="true">' +
               (v.marca ? '<span class="video-selo">' + esc(v.marca) + "</span>" : "") +
