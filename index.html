@@ -205,16 +205,16 @@
   .faixa-janela { overflow: hidden; padding-block: 8px;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
     mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-  .faixa-trilho { display: flex; width: max-content; animation: desliza 40s linear infinite; }
+  .faixa-trilho { display: flex; width: max-content; animation: desliza 60s linear infinite; }
   .faixa-marcas:hover .faixa-trilho { animation-play-state: paused; }
   .faixa-trilho ul { display: flex; flex-shrink: 0; }
   .faixa-trilho li { flex: none; padding-inline: 12px; }
   .logo-marca {
-    display: block; width: 104px; height: 104px; border-radius: 50%; overflow: hidden;
+    display: block; width: 88px; height: 88px; border-radius: 50%; overflow: hidden;
     background: var(--branco); border: 1px solid var(--linha); box-shadow: var(--sombra);
   }
   .logo-marca img { width: 100%; height: 100%; object-fit: cover; }
-  @keyframes desliza { to { transform: translateX(-25%); } }
+  @keyframes desliza { to { transform: translateX(-33.3333%); } }
 
   /* 2. Sobre */
   .sobre-grade { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
@@ -418,7 +418,7 @@
   }
   @media (max-width: 520px) {
     .numero-mini { padding: 12px 10px; }
-    .logo-marca { width: 84px; height: 84px; }
+    .logo-marca { width: 72px; height: 72px; }
     .faixa-trilho li { padding-inline: 8px; }
     .faixa-titulo { letter-spacing: .14em; }
     .faixa-titulo::before, .faixa-titulo::after { width: 20px; }
@@ -435,7 +435,7 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; animation: none !important; }
     /* O carrossel de logos continua andando sempre, por escolha da Ana Paula */
-    .faixa-trilho { animation: desliza 40s linear infinite !important; }
+    .faixa-trilho { animation: desliza 60s linear infinite !important; }
     .oculto { opacity: 1; transform: none; }
   }
 </style>
@@ -687,13 +687,21 @@ const ENDERECO_FORMULARIO = ""; // TROCAR
    Para adicionar uma marca, envie a logo e acrescente uma linha aqui. */
 const MARCAS = [
   { nome: "Radiance",       logo: "logo-radiance.webp" },
+  { nome: "Trimod",         logo: "logo-trimod.webp" },
   { nome: "NutriMel",       logo: "logo-nutrimel.webp" },
+  { nome: "O Boticário",    logo: "logo-boticario.webp" },
   { nome: "O.U.i",          logo: "logo-oui.webp" },
+  { nome: "Knut",           logo: "logo-knut.webp" },
   { nome: "Ailos",          logo: "logo-ailos.webp" },
+  { nome: "Eudora",         logo: "logo-eudora.webp" },
   { nome: "HostGator",      logo: "logo-hostgator.webp" },
+  { nome: "Rosa Selvagem",  logo: "logo-rosaselvagem.webp" },
   { nome: "Tetra Pak",      logo: "logo-tetrapak.webp" },
+  { nome: "Perfumoá",       logo: "logo-perfumoa.webp" },
   { nome: "L'Oréal",        logo: "logo-loreal.webp" },
-  { nome: "Beyoung",        logo: "logo-beyoung.webp" }
+  { nome: "Mais Blond",     logo: "logo-maisblond.webp" },
+  { nome: "Beyoung",        logo: "logo-beyoung.webp" },
+  { nome: "Pano Curto",     logo: "logo-panocurto.webp" }
 ];
 
 /* DESTAQUES: os três vídeos grandes.
@@ -842,7 +850,7 @@ const DEPOIMENTOS = [
   const logoMarca = (m, comAlt) =>
     '<li><span class="logo-marca"><img src="' + esc(m.logo) + '" alt="' + (comAlt ? esc(m.nome) : "") + '" width="320" height="320"></span></li>';
   $("faixaMarcas").innerHTML = "<ul>" + MARCAS.map((m) => logoMarca(m, true)).join("") + "</ul>" +
-    ('<ul aria-hidden="true">' + MARCAS.map((m) => logoMarca(m, false)).join("") + "</ul>").repeat(3);
+    ('<ul aria-hidden="true">' + MARCAS.map((m) => logoMarca(m, false)).join("") + "</ul>").repeat(2);
 
   /* Destaques: AQUI o "link" vira o endereço do card e a "capa" vira a imagem */
   $("listaDestaques").innerHTML = DESTAQUES.map((d, i) =>
