@@ -219,8 +219,7 @@
   /* 2. Sobre */
   .sobre-grade { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
   #sobre.secao { padding-block: clamp(32px, 4vw, 56px); }
-  .sobre-foto { box-shadow: var(--sombra-forte); border-radius: var(--raio-grande); }
-  .sobre-foto .midia { border-radius: var(--raio-grande); }
+  .sobre-foto img { display: block; width: 100%; height: auto; mix-blend-mode: multiply; }
   .sobre-texto p { margin-top: 18px; font-size: 1.08rem; color: var(--suave); }
   .promessas { display: grid; gap: 12px; margin-top: 28px; }
   .promessas li {
@@ -629,9 +628,7 @@
       <div class="sobre-foto" data-revelar>
         <!-- FOTO DO SOBRE MIM (foto real): o arquivo foto-sobre.webp fica na mesma pasta do index.html.
              Para trocar, envie outra foto com o mesmo nome ou mude o src abaixo. -->
-        <div class="midia midia--4x5">
-          <img src="foto-sobre.webp" alt="Ana Paula Mendes sorrindo, com roupa fitness clara, em frente a uma parede lilás com plumas" width="1080" height="1920" loading="lazy" style="object-position: 50% 20%">
-        </div>
+        <img src="foto-sobre.webp" alt="Ana Paula Mendes com a mão no queixo, de blusa marrom, com o rosto saindo de uma moldura em efeito 3D" width="902" height="1139" loading="lazy">
       </div>
       <div class="sobre-texto" data-revelar>
         <h2 class="titulo-secao" id="tituloSobre"><span data-en="About">Sobre</span> <span class="destaque" data-en="me">mim</span></h2>
@@ -663,21 +660,6 @@
         <h2 class="titulo-secao" id="tituloServicos"><span data-en="What can we">O que podemos</span> <span class="destaque" data-en="create">criar</span> <span data-en="together?">juntos?</span></h2>
       </div>
       <ul class="planos" id="listaServicos"></ul>
-    </div>
-  </section>
-
-  <!-- 5. NÚMEROS E DEPOIMENTOS (dados nos arrays METRICAS, RESULTADOS e DEPOIMENTOS) -->
-  <section class="secao" id="numeros" aria-labelledby="tituloNumeros">
-    <div class="caixa">
-      <div class="cabeca-secao" data-revelar>
-        <span class="selo-secao" data-en="Reviews">Avaliações da loja</span>
-        <h2 class="titulo-secao" id="tituloNumeros"><span data-en="Numbers and">Números e</span> <span class="destaque" data-en="testimonials">depoimentos</span></h2>
-      </div>
-      <ul class="metricas" id="listaMetricas"></ul>
-      <h3 class="subtitulo" data-revelar data-en="Campaign results">Resultados de campanha</h3>
-      <ul class="resultados" id="listaResultados"></ul>
-      <h3 class="subtitulo" data-revelar data-en="Who has hired me">Quem já contratou</h3>
-      <div class="depoimentos" id="listaDepoimentos"></div>
     </div>
   </section>
 
@@ -1145,17 +1127,6 @@ const DEPOIMENTOS = [
       ).join("") + "</ul>" +
       '<a class="plano-botao" href="#contato" data-pedido="' + esc(s.titulo) + '" data-pedido-en="' + esc(s.titulo_en || s.titulo) + '"' + attrEn("I want this") + ">Quero esse</a>" +
     "</li>"
-  ).join("");
-
-  /* Métricas, resultados e depoimentos */
-  $("listaMetricas").innerHTML = METRICAS.map((m, i) =>
-    '<li class="metrica" data-revelar>' + htmlContador(m, i) + '<span class="rotulo"' + attrEn(m.rotulo_en || m.rotulo) + ">" + esc(m.rotulo) + "</span></li>"
-  ).join("");
-  $("listaResultados").innerHTML = RESULTADOS.map((r) =>
-    '<li class="resultado fundo-verde" data-revelar><strong>' + esc(r.numero) + "</strong><h4" + attrEn(r.campanha_en || r.campanha) + ">" + esc(r.campanha) + "</h4><p" + attrEn(r.resumo_en || r.resumo) + ">" + esc(r.resumo) + "</p></li>"
-  ).join("");
-  $("listaDepoimentos").innerHTML = DEPOIMENTOS.map((d) =>
-    '<figure class="depoimento" data-revelar><blockquote' + attrEn(d.texto_en || d.texto) + ">" + esc(d.texto) + '</blockquote><figcaption><span class="inicial" aria-hidden="true">' + esc(d.nome.charAt(0)) + "</span><span><b>" + esc(d.nome) + "</b><small>" + esc(d.empresa) + "</small></span></figcaption></figure>"
   ).join("");
 
   /* Menu sanduíche */
