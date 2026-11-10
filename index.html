@@ -104,18 +104,12 @@
   .botao--contorno { background: var(--branco); border-color: var(--tinta); }
   .botao--terracota { background: var(--terracota); color: var(--branco); }
 
-  /* Faixa verde e menu */
-  .faixa-entrega {
-    background: var(--verde); color: var(--branco);
-    font-size: .86rem; font-weight: 600; text-align: center; padding: 7px 16px;
-  }
-  .faixa-entrega svg { width: 18px; height: 18px; vertical-align: -4px; margin-right: 6px; fill: none; stroke: var(--terracota-claro); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
+  /* Menu fixo, em verde */
   .topo {
     position: sticky; top: 0; z-index: 50;
-    background: var(--branco);
-    border-bottom: 1px solid var(--linha);
+    background: var(--verde); color: var(--branco);
   }
+  .topo :focus-visible { outline-color: var(--terracota-claro); }
   .topo-linha { display: flex; align-items: center; justify-content: flex-end; gap: 16px; min-height: 66px; }
   .marca-nome { font-weight: 800; font-size: 1.12rem; letter-spacing: -.02em; text-decoration: none; }
   .menu-lista { display: flex; align-items: center; gap: 4px; }
@@ -124,13 +118,13 @@
     font-size: .94rem; font-weight: 600; text-decoration: none;
     transition: background-color .2s ease;
   }
-  .menu-lista a:hover { background: var(--verde-claro); }
+  .menu-lista a:hover { background: rgba(255, 255, 255, .16); }
   .menu-botao {
     display: none; width: 46px; height: 46px; padding: 0; place-items: center;
-    background: var(--gelo); border: 0; border-radius: 14px; cursor: pointer;
+    background: rgba(255, 255, 255, .16); border: 0; border-radius: 14px; cursor: pointer;
   }
   .menu-botao span, .menu-botao span::before, .menu-botao span::after {
-    display: block; width: 20px; height: 2px; background: var(--tinta); border-radius: 2px;
+    display: block; width: 20px; height: 2px; background: var(--branco); border-radius: 2px;
     transition: transform .2s ease, background-color .2s ease;
   }
   .menu-botao span { position: relative; }
@@ -145,13 +139,13 @@
   .capa { padding-top: 16px; }
   .capa-painel {
     display: grid; grid-template-columns: 1fr 1fr;
-    grid-template-areas: "texto foto" "numeros foto";
+    grid-template-areas: "texto foto";
     gap: 32px clamp(24px, 3vw, 40px);
     /* Sem borda embaixo: a capa termina junto com a foto */
     padding: clamp(20px, 3vw, 36px) clamp(24px, 5vw, 64px) 0;
     background: var(--gelo); border-radius: var(--raio-grande); overflow: hidden;
   }
-  .capa-texto { grid-area: texto; min-width: 0; align-self: end; }
+  .capa-texto { grid-area: texto; min-width: 0; align-self: center; padding-bottom: clamp(20px, 3vw, 36px); }
   .capa-nome {
     margin-top: 6px;
     font-size: clamp(3rem, 8.4vw, 6.4rem); line-height: .98;
@@ -538,9 +532,10 @@
       background: var(--branco); border-bottom: 1px solid var(--linha); box-shadow: var(--sombra);
     }
     .menu-lista.aberto { display: flex; }
-    .menu-lista a { padding: 12px 14px; font-size: 1.05rem; }
-    .capa-painel { grid-template-columns: minmax(0, 1fr); grid-template-areas: "texto" "numeros" "foto"; }
-    .capa-numeros { margin-bottom: 0; }
+    .menu-lista a { padding: 12px 14px; font-size: 1.05rem; color: var(--tinta); }
+    .menu-lista a:hover { background: var(--verde-claro); }
+    .capa-painel { grid-template-columns: minmax(0, 1fr); grid-template-areas: "texto" "foto"; }
+    .capa-texto { padding-bottom: 0; }
     .capa-foto { justify-self: center; max-width: 560px; }
     .sobre-grade, .contato-grade { grid-template-columns: minmax(0, 1fr); }
     .sobre-foto { max-width: 420px; width: 100%; margin-inline: auto; }
@@ -591,12 +586,7 @@
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
 </svg>
 
-<!-- Faixa verde do topo -->
-<p class="faixa-entrega">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6h12v11H2zM14 10h4l4 4v3h-8z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg><span data-en="Delivery within 72 business hours">Entrega em até 72h úteis</span>
-</p>
-
-<!-- Menu fixo -->
+<!-- Menu fixo, em verde -->
 <header class="topo">
   <div class="caixa topo-linha">
     <nav aria-label="Menu principal" data-en-aria="Main menu">
@@ -639,9 +629,6 @@
             <img src="foto-capa.webp" alt="Ana Paula Mendes sorrindo, de cabelo cacheado e blusa branca de cetim" width="1080" height="1920" fetchpriority="high">
           </div>
         </div>
-
-        <!-- Os três números vêm do array METRICAS, no começo do script -->
-        <ul class="capa-numeros" id="capaNumeros"></ul>
       </div>
 
       <div class="faixa-marcas" role="group" aria-labelledby="faixaTitulo">
@@ -776,23 +763,6 @@
   </div>
 </footer>
 
-<!-- CARD DE CAPTURA: aparece sozinho depois de 7 segundos, uma vez por visita -->
-<dialog class="captura" id="captura" aria-labelledby="capturaTitulo">
-  <div class="captura-corpo" id="capturaCorpo" tabindex="-1" autofocus>
-    <button class="captura-fechar" id="capturaFechar" type="button" aria-label="Fechar" data-en-aria="Close">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
-    </button>
-    <div id="capturaConteudo">
-      <h2 id="capturaTitulo" data-en="Want my full media kit?">Quer meu mídia kit completo?</h2>
-      <form id="formCaptura">
-        <label class="campo"><span data-en="Name">Nome</span><input type="text" name="nome" autocomplete="name" required></label>
-        <label class="campo"><span data-en="Email">E-mail</span><input type="email" name="email" autocomplete="email" required></label>
-        <button class="botao botao--verde form-botao" type="submit" data-en="Send it to me">Quero receber</button>
-      </form>
-    </div>
-    <div class="confirmacao" id="confirmacaoCaptura" tabindex="-1" role="status" hidden></div>
-  </div>
-</dialog>
 
 <noscript><p style="padding:16px;text-align:center">Para ver os trabalhos, ative o JavaScript ou fale comigo pelo e-mail anapaula.ugcmanager@gmail.com.</p></noscript>
 
@@ -1024,11 +994,6 @@ const DEPOIMENTOS = [
   function htmlContador(m, i) {
     return '<strong><span class="so-leitor">' + esc(textoMetrica(m, m.valor)) + '</span><span aria-hidden="true" data-contador="' + i + '">' + esc(textoMetrica(m, m.valor)) + "</span></strong>";
   }
-
-  /* Capa: três números */
-  $("capaNumeros").innerHTML = METRICAS.slice(0, 2).map((m, i) =>
-    '<li class="numero-mini">' + htmlContador(m, i) + '<span class="rotulo"' + attrEn(m.rotulo_en || m.rotulo) + ">" + esc(m.rotulo) + "</span></li>"
-  ).join("");
 
   /* Capa: faixa de marcas. As cópias extras fazem a faixa rodar sem emenda. */
   const logoMarca = (m, comAlt) =>
@@ -1446,65 +1411,6 @@ const DEPOIMENTOS = [
       );
       campo.value = pedidoAutomatico;
     }
-  });
-
-  /* Card de captura */
-  const captura = $("captura");
-  const CHAVE = "midiaKitMostrado";
-  let jaMostrou = false;
-  function foiMostrado() {
-    try { return jaMostrou || sessionStorage.getItem(CHAVE) === "1"; } catch (erro) { return jaMostrou; }
-  }
-  function marcarMostrado() {
-    jaMostrou = true;
-    try { sessionStorage.setItem(CHAVE, "1"); } catch (erro) { /* sem armazenamento, vale só nesta página */ }
-  }
-  function tentarAbrirCaptura() {
-    if (foiMostrado() || !captura.showModal) return;
-    /* Espera um pouco se a pessoa estiver digitando no contato ou com o menu aberto */
-    const digitando = formContato.contains(document.activeElement) && document.activeElement !== formContato;
-    if (digitando || menuLista.classList.contains("aberto")) {
-      setTimeout(tentarAbrirCaptura, 3000);
-      return;
-    }
-    marcarMostrado();
-    captura.showModal();
-  }
-  setTimeout(tentarAbrirCaptura, 7000);
-
-  $("capturaFechar").addEventListener("click", () => captura.close());
-  /* Clique no fundo escuro fecha. O Esc já é tratado pelo próprio navegador. */
-  captura.addEventListener("click", (e) => { if (e.target === captura) captura.close(); });
-
-  $("formCaptura").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const botao = form.querySelector("button");
-    const dados = Object.fromEntries(new FormData(form));
-    botao.disabled = true;
-    const enviado = await enviarDados(Object.assign({ origem: "Mídia kit" }, dados));
-    botao.disabled = false;
-
-    const nome = esc(primeiroNome(dados.nome));
-    const caixa = $("confirmacaoCaptura");
-    if (enviado) {
-      caixa.innerHTML = '<div class="confirmacao-icone">' + iconeCheck + "</div>" +
-        "<h2>" + t("Pedido anotado, ", "Request received, ") + nome + "!</h2><p>" + t("Vou mandar o mídia kit para ", "I'll send the media kit to ") + esc(dados.email) + ".</p>";
-    } else {
-      const texto = t(
-        "Olá, " + CONTATO.nome + "! Meu nome é " + dados.nome + " e quero receber o seu mídia kit completo no e-mail " + dados.email + ".",
-        "Hi, " + CONTATO.nome + "! My name is " + dados.nome + " and I'd like to receive your full media kit at " + dados.email + "."
-      );
-      caixa.innerHTML = '<div class="confirmacao-icone">' + iconeCheck + "</div>" +
-        "<h2>" + t("Falta só um toque, ", "Just one more tap, ") + nome + "!</h2><p>" + t("Escolha por onde me enviar o pedido. O texto já vai escrito.", "Choose how to send your request. The text is already written.") + "</p>" +
-        '<div class="confirmacao-botoes">' +
-          '<a class="botao botao--verde" href="' + esc(linkWhats(texto)) + '" target="_blank" rel="noopener">' + t("Pedir pelo WhatsApp", "Ask via WhatsApp") + "</a>" +
-          '<a class="botao botao--contorno" href="' + esc(linkEmail(t("Quero o mídia kit", "Media kit request"), texto)) + '">' + t("Pedir por e-mail", "Ask by email") + "</a>" +
-        "</div>";
-    }
-    $("capturaConteudo").hidden = true;
-    caixa.hidden = false;
-    caixa.focus();
   });
 
   /* Ano automático no rodapé */
