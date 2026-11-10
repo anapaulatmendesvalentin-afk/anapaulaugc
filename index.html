@@ -279,6 +279,14 @@
     font-size: .78rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--verde);
   }
   .eyebrow-linhas::before, .eyebrow-linhas::after { content: ""; width: 36px; height: 1px; background: currentColor; }
+  /* Colagem de fotos: 5 colunas, a 2ª e a 4ª descem um pouco */
+  #fotos.secao { padding-top: clamp(24px, 3vw, 40px); }
+  .colagem { list-style: none; margin: 0; padding: 0 0 56px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; }
+  .foto-item { margin: 0; border-radius: 18px; overflow: hidden; background: var(--gelo); box-shadow: 0 14px 34px -18px rgba(47, 58, 31, .45); }
+  .foto-item img { display: block; width: 100%; aspect-ratio: 9 / 16; height: auto; object-fit: cover; transition: transform .6s ease; }
+  .foto-item:hover img { transform: scale(1.04); }
+  .colagem .foto-item:nth-child(5n+2), .colagem .foto-item:nth-child(5n+4) { translate: 0 56px; }
+  @media (prefers-reduced-motion: reduce) { .foto-item img { transition: none; } .foto-item:hover img { transform: none; } }
   .planos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
   .plano {
     position: relative; display: flex; flex-direction: column; padding: 30px 26px 26px;
@@ -655,7 +663,18 @@
     </div>
   </section>
 
-  <!-- 4. SERVIÇOS: O QUE PODEMOS CRIAR JUNTOS? (dados no array SERVICOS) -->
+  <!-- 4. FOTOS (colagem, dados no array FOTOS) -->
+  <section class="secao" id="fotos" aria-labelledby="tituloFotos">
+    <div class="caixa">
+      <div class="cabeca-centro" data-revelar>
+        <p class="eyebrow-linhas" data-en="Photos">Fotos</p>
+        <h2 class="titulo-secao" id="tituloFotos"><span data-en="Photos for your">Fotos para a sua</span> <span class="destaque" data-en="brand">marca</span></h2>
+      </div>
+      <ul class="colagem" id="listaFotos"></ul>
+    </div>
+  </section>
+
+  <!-- 5. SERVIÇOS: O QUE PODEMOS CRIAR JUNTOS? (dados no array SERVICOS) -->
   <section class="secao secao--gelo" id="servicos" aria-labelledby="tituloServicos">
     <div class="caixa">
       <div class="cabeca-centro" data-revelar>
@@ -856,6 +875,21 @@ const NICHOS = [
     { yt: "GOKn3UcO9hk", marca: "" },
     { yt: "vNugsq5cbKs", marca: "" }
   ]}
+];
+
+/* FOTOS: a colagem entre os vídeos e os serviços.
+   Os arquivos ficam na mesma pasta do index.html. A ordem aqui é a ordem na colagem. */
+const FOTOS = [
+  { src: "foto-galeria-01.webp", alt: "Ana Paula segurando uma bandeja com a linha Milk da Knut", alt_en: "Ana Paula holding a tray with the Knut Milk line" },
+  { src: "foto-galeria-02.webp", alt: "Ana Paula mostrando o kit da HostGator com caneca, caderno e pelúcia", alt_en: "Ana Paula showing the HostGator kit with mug, notebook and plush toy" },
+  { src: "foto-galeria-03.webp", alt: "Ana Paula treinando com halteres rosa e conjunto fitness marrom", alt_en: "Ana Paula working out with pink dumbbells in a brown fitness set" },
+  { src: "foto-galeria-04.webp", alt: "Shampoo Mais Blond Purple encostado no rosto, entre os cachos", alt_en: "Mais Blond Purple shampoo held against her face, among her curls" },
+  { src: "foto-galeria-05.webp", alt: "Ana Paula na cama mostrando meias de compressão", alt_en: "Ana Paula on the bed showing compression socks" },
+  { src: "foto-galeria-06.webp", alt: "Ana Paula sorrindo com o Dream Coat da Color Wow", alt_en: "Ana Paula smiling with Color Wow Dream Coat" },
+  { src: "foto-galeria-07.webp", alt: "Ana Paula de faixa e roupão segurando um produto de skincare Theoric", alt_en: "Ana Paula in a headband and robe holding a Theoric skincare product" },
+  { src: "foto-galeria-08.webp", alt: "Ana Paula sentada com conjunto fitness claro da Pano Curto", alt_en: "Ana Paula sitting in a light Pano Curto fitness set" },
+  { src: "foto-galeria-09.webp", alt: "Ana Paula de blusa verde mostrando o Dream Coat da Color Wow", alt_en: "Ana Paula in a green top showing Color Wow Dream Coat" },
+  { src: "foto-galeria-10.webp", alt: "Detalhe do top vermelho da Pano Curto", alt_en: "Close-up of the red Pano Curto top" }
 ];
 
 /* SERVICOS: os cards de "O que podemos criar juntos?".
@@ -1147,6 +1181,11 @@ const DEPOIMENTOS = [
     if (e.key === "Escape" && menuLista.classList.contains("aberto")) { menu(false); menuBotao.focus(); }
   });
 
+  /* Colagem de fotos */
+  $("listaFotos").innerHTML = FOTOS.map((f) =>
+    '<li class="foto-item" data-revelar><img src="' + esc(f.src) + '" alt="' + esc(f.alt) + '" data-alt-pt="' + esc(f.alt) + '" data-alt-en="' + esc(f.alt_en || f.alt) + '" width="640" height="1138" loading="lazy" decoding="async"></li>'
+  ).join("");
+
   /* Entrada suave ao rolar */
   const reveladores = document.querySelectorAll("[data-revelar]");
   if ("IntersectionObserver" in window && !menosMovimento) {
@@ -1350,6 +1389,7 @@ const DEPOIMENTOS = [
       if (el.dataset.ptAria === undefined) el.dataset.ptAria = el.getAttribute("aria-label") || "";
       el.setAttribute("aria-label", novo === "en" ? el.dataset.enAria : el.dataset.ptAria);
     });
+    document.querySelectorAll("[data-alt-en]").forEach((img) => { img.alt = novo === "en" ? img.dataset.altEn : img.dataset.altPt; });
     document.querySelectorAll("[data-idioma]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.idioma === novo)));
     menu(menuLista.classList.contains("aberto"));
     try { localStorage.setItem("idioma", novo); } catch (erro) { /* sem armazenamento */ }
