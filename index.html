@@ -816,8 +816,9 @@ const MARCAS = [
 ];
 
 /* NICHOS: os vídeos agora vêm do painel (aba Portfólio, tabela "videos").
-   Esta lista fica só de reserva: o site usa ela se o banco não responder.
-   Também é daqui que sai o nome em inglês de cada nicho.
+   Esta lista fica de reserva: o site usa ela se o banco não responder.
+   Daqui também saem o nome em inglês e a ORDEM dos nichos no site
+   (para mudar a ordem dos nichos, mude a ordem dos blocos aqui).
    nome / en = nome do nicho em português e em inglês.
    yt    = o código do vídeo no YouTube (o que vem depois de /shorts/ no link).
    marca = nome que aparece na etiqueta em cima do vídeo. Pode ficar vazio.
@@ -828,6 +829,13 @@ const NICHOS = [
     { yt: "KWq-VLzWyWY", marca: "Color Wow" },
     { yt: "cEttY8E7l8M", marca: "Color Wow" },
     { yt: "QK1CwChhF7g", marca: "Mais Blond" }
+  ]},
+  { nome: "Tech e app", en: "Tech & apps", videos: [
+    { yt: "NE6bZiqZ2Xs", marca: "HostGator" },
+    { yt: "UeHXeWuaUy8", marca: "HostGator" },
+    { yt: "Nxs7HNSP33k", marca: "Crehub" },
+    { yt: "NZAQw-RYHjU", marca: "O Boticário" },
+    { yt: "mBPcsj3t_28", marca: "Ailos" }
   ]},
   { nome: "Fragrance", en: "Fragrance", videos: [
     { yt: "6MQVFUYebSA", marca: "Sou Vegan" },
@@ -857,13 +865,6 @@ const NICHOS = [
     { yt: "sqIIm1Nrw1I", marca: "Radiance" },
     { yt: "Ul68krUWIME", marca: "Pano Curto" },
     { yt: "zpFogokp_pw", marca: "Pano Curto" }
-  ]},
-  { nome: "Tech e app", en: "Tech & apps", videos: [
-    { yt: "NE6bZiqZ2Xs", marca: "HostGator" },
-    { yt: "UeHXeWuaUy8", marca: "HostGator" },
-    { yt: "Nxs7HNSP33k", marca: "Crehub" },
-    { yt: "NZAQw-RYHjU", marca: "O Boticário" },
-    { yt: "mBPcsj3t_28", marca: "Ailos" }
   ]},
   { nome: "Serviços", en: "Services", videos: [
     { yt: "lhQzqgYu3tU", marca: "Fisioclin" },
@@ -1044,6 +1045,9 @@ const DEPOIMENTOS = [
         if (!g) { g = { nome, en: ingles[nome] || nome, videos: [] }; grupos.push(g); }
         g.videos.push({ yt, marca: v.marca || "", destaque: v.destaque || "" });
       });
+      /* A ordem dos nichos segue a lista NICHOS acima. Nicho novo, que não está lá, vai para o fim. */
+      const posicao = (nome) => { const i = NICHOS.findIndex((n) => n.nome === nome); return i < 0 ? 999 : i; };
+      grupos.sort((a, b) => posicao(a.nome) - posicao(b.nome));
       return grupos.length ? grupos : null;
     } catch (erro) {
       return null;
