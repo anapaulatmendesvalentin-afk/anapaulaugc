@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="admin.css?v=2">
 </head>
 <body>
 <!-- A página fica escondida até conferir a sessão. Sem sessão, vai para o login. -->
@@ -76,6 +76,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 <script src="../js/banco.js"></script>
 <script src="../js/biblioteca.js"></script>
-<script src="admin.js"></script>
+<!-- O ?v= muda a cada atualização para o navegador não usar a versão antiga guardada -->
+<script src="admin.js?v=2"></script>
 </body>
 </html>
