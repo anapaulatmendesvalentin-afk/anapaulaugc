@@ -1108,6 +1108,20 @@ const DEPOIMENTOS = [
   window.addEventListener("resize", ajustarSetas);
   carregarVideosDoPainel().then((doPainel) => desenharNichos(doPainel || NICHOS));
 
+  /* Vídeo assistido: conta quando a pessoa clica para ver com som (a prévia sem som do mouse não conta).
+     Cada vídeo conta uma vez por sessão do navegador. Vai para a mesma tabela das visitas,
+     marcado como "video:código", e o painel separa uma coisa da outra. */
+  function registrarAssistido(yt) {
+    if (!yt || !bancoSite || !/^https?:$/.test(location.protocol) || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) return;
+    const chave = "assistido:" + yt;
+    try {
+      if (sessionStorage.getItem(chave) === "1") return;
+      sessionStorage.setItem(chave, "1");
+    } catch (erro) { /* sem armazenamento: conta mesmo assim */ }
+    bancoSite.from("visitas").insert({ pagina: ("video:" + yt).slice(0, 300), origem: "" })
+      .then(() => {}, () => {});
+  }
+
   /* Contador de visitas do painel: uma visita por sessão do navegador.
      Grava só a página e de onde a pessoa veio. Nada de serviço de fora, nada pedido ao visitante. */
   (function registrarVisita() {
@@ -1230,7 +1244,7 @@ const DEPOIMENTOS = [
     if (!botao) return;
     const frame = botao.closest(".video-frame");
     if (frame.classList.contains("com-som")) { parar(frame); botao.setAttribute("aria-pressed", "false"); }
-    else { tocar(frame, true); botao.setAttribute("aria-pressed", "true"); }
+    else { tocar(frame, true); botao.setAttribute("aria-pressed", "true"); registrarAssistido(frame.dataset.yt); }
   });
 
   /* Serviços: cards como vitrine, o primeiro em destaque */
