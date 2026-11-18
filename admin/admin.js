@@ -296,11 +296,15 @@
 
   async function abaPortfolio(area, aindaAqui) {
     const inicio = new Date(); inicio.setHours(0, 0, 0, 0); inicio.setDate(inicio.getDate() - 13);
-    const [videos, visitas] = await Promise.all([
+    const [videos, registros] = await Promise.all([
       ler("videos", (q) => q.select("*").order("ordem", { ascending: true }).order("id", { ascending: true })),
-      ler("visitas", (q) => q.select("data, origem").gte("data", inicio.toISOString()).limit(20000))
+      ler("visitas", (q) => q.select("data, origem, pagina").gte("data", inicio.toISOString()).limit(20000))
     ]);
     if (!aindaAqui()) return;
+    /* Na tabela visitas, as linhas "video:código" são vídeos assistidos; o resto são visitas ao site */
+    const ehVideo = (r) => String(r.pagina || "").indexOf("video:") === 0;
+    const visitas = registros.filter((r) => !ehVideo(r));
+    const assistidos = registros.filter(ehVideo).map((r) => ({ dia: r.data ? iso(new Date(r.data)) : "", yt: String(r.pagina).slice(6) }));
 
     /* Visitas por dia nos últimos 14 dias */
     const dias = [];
@@ -346,6 +350,7 @@
         "</div>" +
         '<div class="cartao" id="cartaoOrigens"></div>' +
       "</div>" +
+      '<div class="cartao" id="cartaoAssistidos"></div>' +
       '<div class="cartao">' +
         '<div class="cartao-topo"><h2>Meus vídeos</h2><span class="texto-suave">Arraste pela alcinha para mudar a ordem no site.</span>' +
         '<button class="botao" type="button" id="novoVideo">' + ICONE.mais + "Adicionar vídeo</button></div>" +
@@ -384,6 +389,36 @@
         b.setAttribute("aria-pressed", String(ativo));
         b.classList.toggle("escolhida", ativo);
       });
+      desenharAssistidos();
+    }
+
+    /* Vídeos mais assistidos (cliques para ver com som), no mesmo período escolhido acima */
+    function desenharAssistidos() {
+      const cartao = $("cartaoAssistidos");
+      const doPeriodo = assistidos.filter((a) => !diaEscolhido || a.dia === diaEscolhido);
+      const conta = {};
+      doPeriodo.forEach((a) => { conta[a.yt] = (conta[a.yt] || 0) + 1; });
+      const ordem = Object.keys(conta).sort((a, b) => conta[b] - conta[a]);
+      const maior = ordem.length ? conta[ordem[0]] : 0;
+      const quando = !diaEscolhido ? "nos últimos 14 dias" : diaEscolhido === hojeISO() ? "hoje" : "em " + fmtData(diaEscolhido);
+      const descrever = (yt) => {
+        const v = videos.find((x) => idYoutube(x.link) === yt);
+        return v ? { nome: v.marca || v.titulo || "Sem título", nicho: v.nicho || "", link: v.link } : { nome: "Vídeo que saiu do site", nicho: "", link: "https://youtu.be/" + yt };
+      };
+      cartao.innerHTML =
+        '<div class="cartao-topo"><h2>Vídeos mais assistidos ' + esc(quando) + "</h2>" +
+          '<span class="texto-suave">' + plural(doPeriodo.length, "vez", "vezes") + " que alguém deu play</span></div>" +
+        (!ordem.length
+          ? '<p class="vazio">' + (assistidos.length ? "Ninguém deu play " + esc(quando) + "." : "Ainda não há vídeos assistidos. Quando alguém clicar para ver um vídeo com som no seu portfólio, ele aparece aqui, do mais visto para o menos visto.") + "</p>"
+          : '<ul class="lista-origens">' + ordem.slice(0, 10).map((yt, i) => {
+              const d = descrever(yt);
+              const pct = maior > 0 ? Math.round((conta[yt] / maior) * 100) : 0;
+              return '<li><span><b>' + (i + 1) + ".</b> " +
+                (yt ? '<img class="miniatura" style="width:20px;height:32px;vertical-align:middle;margin:0 6px" src="https://i.ytimg.com/vi/' + esc(yt) + '/hqdefault.jpg" alt="">' : "") +
+                esc(d.nome) + (d.nicho ? ' <span class="texto-suave">' + esc(d.nicho) + "</span>" : "") +
+                ' <a class="texto-suave" href="' + esc(d.link) + '" target="_blank" rel="noopener">ver</a></span>' +
+                "<b>" + plural(conta[yt], "play", "plays") + '</b><span class="trilho"><i style="width:' + pct + '%"></i></span></li>';
+            }).join("") + "</ul>");
     }
     desenharOrigens();
     $("cartaoOrigens").addEventListener("click", (e) => {
