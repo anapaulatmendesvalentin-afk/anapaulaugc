@@ -112,7 +112,10 @@ svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width:
 
 /* Gráfico */
 .grafico { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); align-items: end; gap: 6px; height: 160px; padding-top: 18px; }
-.barra { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; min-width: 0; }
+.barra { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; min-width: 0; padding: 0 2px 2px; border: 0; background: none; border-radius: 8px; cursor: pointer; font: inherit; color: inherit; }
+.barra:hover { background: var(--gelo); }
+.barra.escolhida { background: var(--verde-claro); }
+.barra.escolhida i { background: var(--verde-escuro); }
 .barra i { display: block; width: 100%; max-width: 26px; background: var(--verde); border-radius: 6px 6px 2px 2px; min-height: 2px; }
 .barra.hoje i { background: var(--terracota); }
 .barra b { font-size: 10px; font-weight: 700; }

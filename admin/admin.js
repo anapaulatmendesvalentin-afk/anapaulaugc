@@ -281,6 +281,19 @@
     return /^[\w-]{11}$/.test(t) ? t : "";
   };
 
+  /* Nome bonito para a origem da visita (ig vira Instagram, e assim por diante) */
+  const ORIGENS_CONHECIDAS = [
+    [/^(ig|insta|instagram)$/i, "Instagram"], [/^(fb|facebook)$/i, "Facebook"], [/^(wa|whats|whatsapp)$/i, "WhatsApp"],
+    [/^(tt|tiktok)$/i, "TikTok"], [/^(yt|youtube)$/i, "YouTube"], [/^(li|linkedin)$/i, "LinkedIn"],
+    [/^(email|e-mail|mail)$/i, "E-mail"], [/^google$/i, "Google"]
+  ];
+  function nomeOrigem(o) {
+    const t = String(o || "").trim();
+    if (!t) return "Direto";
+    const achado = ORIGENS_CONHECIDAS.find((x) => x[0].test(t));
+    return achado ? achado[1] : t;
+  }
+
   async function abaPortfolio(area, aindaAqui) {
     const inicio = new Date(); inicio.setHours(0, 0, 0, 0); inicio.setDate(inicio.getDate() - 13);
     const [videos, visitas] = await Promise.all([
@@ -294,11 +307,14 @@
     for (let i = 0; i < 14; i++) { const d = new Date(inicio); d.setDate(inicio.getDate() + i); dias.push(iso(d)); }
     const porDia = {};
     const porOrigem = {};
+    const porDiaOrigem = {};
     visitas.forEach((v) => {
       const k = v.data ? iso(new Date(v.data)) : "";
       porDia[k] = (porDia[k] || 0) + 1;
-      const o = (v.origem || "").trim() || "Direto";
+      const o = nomeOrigem(v.origem);
       porOrigem[o] = (porOrigem[o] || 0) + 1;
+      porDiaOrigem[k] = porDiaOrigem[k] || {};
+      porDiaOrigem[k][o] = (porDiaOrigem[k][o] || 0) + 1;
     });
     const total14 = visitas.length;
     const hoje = porDia[hojeISO()] || 0;
@@ -321,20 +337,14 @@
         '<div class="cartao"><h2>Visitas nos últimos 14 dias</h2>' +
           (total14 === 0
             ? '<p class="vazio">Ainda não há visitas registradas. Quando as pessoas começarem a abrir o seu portfólio, aqui vai aparecer uma barra para cada dia, mostrando quantas visitas chegaram.</p>'
-            : '<div class="grafico" role="img" aria-label="Visitas por dia nos últimos 14 dias">' + dias.map((d) => {
+            : '<p class="texto-suave" style="margin-top:-4px">Clique numa barra para ver de onde vieram as visitas daquele dia.</p>' +
+              '<div class="grafico" id="grafico" aria-label="Visitas por dia nos últimos 14 dias">' + dias.map((d) => {
                 const n = porDia[d] || 0;
                 const altura = maiorDia > 0 ? Math.max(2, Math.round((n / maiorDia) * 100)) : 2;
-                return '<div class="barra' + (d === hojeISO() ? " hoje" : "") + '" title="' + fmtData(d) + ": " + plural(n, "visita", "visitas") + '"><b>' + (n || "") + '</b><i style="height:' + altura + '%"></i><span>' + fmtDia(d) + "</span></div>";
+                return '<button type="button" class="barra' + (d === hojeISO() ? " hoje" : "") + '" data-dia="' + d + '" aria-pressed="false" title="' + fmtData(d) + ": " + plural(n, "visita", "visitas") + '" aria-label="' + fmtData(d) + ", " + plural(n, "visita", "visitas") + '"><b>' + (n || "") + '</b><i style="height:' + altura + '%"></i><span>' + fmtDia(d) + "</span></button>";
               }).join("") + "</div>") +
         "</div>" +
-        '<div class="cartao"><h2>Por onde as pessoas chegaram</h2>' +
-          (total14 === 0
-            ? '<p class="vazio">Aqui vai aparecer de onde vêm as visitas: Instagram, Google, WhatsApp ou link direto.</p>'
-            : '<ul class="lista-origens">' + origens.slice(0, 8).map((o) => {
-                const pct = Math.round((porOrigem[o] / total14) * 100);
-                return "<li><span>" + esc(o) + "</span><b>" + numero(porOrigem[o]) + " (" + pct + "%)</b><span class=\"trilho\"><i style=\"width:" + pct + '%"></i></span></li>';
-              }).join("") + "</ul>") +
-        "</div>" +
+        '<div class="cartao" id="cartaoOrigens"></div>' +
       "</div>" +
       '<div class="cartao">' +
         '<div class="cartao-topo"><h2>Meus vídeos</h2><span class="texto-suave">Arraste pela alcinha para mudar a ordem no site.</span>' +
@@ -343,6 +353,51 @@
           '<th style="width:34px"><span class="so-leitor">Ordem</span></th><th>Vídeo</th><th>Nicho</th><th>Formato</th><th>Marca</th><th>Destaque</th><th style="width:110px"><span class="so-leitor">Ações</span></th>' +
         '</tr></thead><tbody id="corpoVideos"></tbody></table></div>' +
       "</div>";
+
+    /* De onde vieram: os 14 dias juntos, ou um dia só (clicando na barra ou em "Hoje") */
+    let diaEscolhido = null;
+    function desenharOrigens() {
+      const cartao = $("cartaoOrigens");
+      const contagem = diaEscolhido ? (porDiaOrigem[diaEscolhido] || {}) : porOrigem;
+      const total = diaEscolhido ? (porDia[diaEscolhido] || 0) : total14;
+      const lista = Object.keys(contagem).sort((a, b) => contagem[b] - contagem[a]);
+      const titulo = !diaEscolhido ? "Por onde chegaram nos últimos 14 dias"
+        : diaEscolhido === hojeISO() ? "Por onde chegaram hoje"
+        : "Por onde chegaram em " + fmtData(diaEscolhido);
+      cartao.innerHTML =
+        '<div class="cartao-topo"><h2>' + esc(titulo) + "</h2>" +
+          '<div class="filtros" role="group" aria-label="Período">' +
+            '<button class="filtro" type="button" data-periodo="14" aria-pressed="' + !diaEscolhido + '">14 dias</button>' +
+            '<button class="filtro" type="button" data-periodo="hoje" aria-pressed="' + (diaEscolhido === hojeISO()) + '">Hoje</button>' +
+          "</div></div>" +
+        (total14 === 0
+          ? '<p class="vazio">Aqui vai aparecer de onde vêm as visitas: Instagram, Google, WhatsApp ou link direto.</p>'
+          : total === 0
+            ? '<p class="vazio">Nenhuma visita ' + (diaEscolhido === hojeISO() ? "hoje" : "neste dia") + " ainda.</p>"
+            : '<p class="texto-suave" style="margin-bottom:6px">' + plural(total, "visita", "visitas") + "</p>" +
+              '<ul class="lista-origens">' + lista.slice(0, 10).map((o) => {
+                const pct = Math.round((contagem[o] / total) * 100);
+                return "<li><span>" + esc(o) + "</span><b>" + numero(contagem[o]) + " (" + pct + "%)</b><span class=\"trilho\"><i style=\"width:" + pct + '%"></i></span></li>';
+              }).join("") + "</ul>");
+      document.querySelectorAll("#grafico .barra").forEach((b) => {
+        const ativo = b.dataset.dia === diaEscolhido;
+        b.setAttribute("aria-pressed", String(ativo));
+        b.classList.toggle("escolhida", ativo);
+      });
+    }
+    desenharOrigens();
+    $("cartaoOrigens").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-periodo]");
+      if (!b) return;
+      diaEscolhido = b.dataset.periodo === "hoje" ? hojeISO() : null;
+      desenharOrigens();
+    });
+    if ($("grafico")) $("grafico").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-dia]");
+      if (!b) return;
+      diaEscolhido = diaEscolhido === b.dataset.dia ? null : b.dataset.dia;
+      desenharOrigens();
+    });
 
     let lista = videos.slice();
     const corpo = $("corpoVideos");
